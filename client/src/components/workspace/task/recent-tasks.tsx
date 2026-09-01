@@ -57,17 +57,17 @@ const RecentTasks = () => {
           return (
             <li
               key={task._id}
-              className="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+              className="p-4 flex items-center justify-between hover:bg-muted/50 transition-colors"
             >
               {/* Task Info */}
               <div className="flex flex-col space-y-1 flex-grow">
-                <span className="text-sm capitalize text-gray-600 font-medium">
+                <span className="text-sm capitalize text-muted-foreground font-medium">
                   {task.taskCode}
                 </span>
-                <p className="text-md font-semibold text-gray-800 truncate">
+                <p className="text-md font-semibold text-foreground truncate">
                   {task.title}
                 </p>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-muted-foreground">
                   Due: {task.dueDate ? format(task.dueDate, "PPP") : null}
                 </span>
               </div>
@@ -154,7 +154,7 @@ export default RecentTasks;
 //           <li
 //             key={index}
 //             role="listitem"
-//             className="shadow-none border-0 py-2 hover:bg-[#fbfbfb] transition-colors ease-in-out "
+//             className="shadow-none border-0 py-2 hover:bg-muted/50 transition-colors ease-in-out "
 //           >
 //             <div className="grid grid-cols-7 gap-1 p-0">
 //               <div className="shrink">
@@ -167,7 +167,7 @@ export default RecentTasks;
 //               <div>Todo</div>
 //               <div>High</div>
 //               <div className="flex items-center gap-4 place-self-end">
-//                 <span className="text-sm text-gray-500">Assigned To</span>
+//                 <span className="text-sm text-muted-foreground">Assigned To</span>
 //                 <Avatar className="hidden h-9 w-9 sm:flex">
 //                   <AvatarImage src="/avatars/01.png" alt="Avatar" />
 //                   <AvatarFallback>{item.assigneeTo}</AvatarFallback>

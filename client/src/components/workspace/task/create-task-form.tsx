@@ -495,7 +495,7 @@ export default function CreateTaskForm(props: {
             </div>
 
             <Button
-              className="flex place-self-end  h-[40px] text-white font-semibold"
+              className="flex place-self-end  h-[40px]  font-semibold"
               type="submit"
               disabled={isPending}
             >

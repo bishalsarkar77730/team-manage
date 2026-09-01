@@ -136,7 +136,7 @@ const AllMembers = () => {
                   <span
                     className={cn(
                       isOnline
-                        ? "font-medium text-emerald-600"
+                        ? "font-medium text-emerald-600 dark:text-emerald-400"
                         : "text-muted-foreground"
                     )}
                   >

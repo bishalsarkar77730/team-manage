@@ -84,7 +84,7 @@ const Asidebar = () => {
                     >
                       <Avatar className="h-8 w-8 rounded-full">
                         <AvatarImage src={user?.profilePicture || ""} />
-                        <AvatarFallback className="rounded-full border border-gray-500">
+                        <AvatarFallback className="rounded-full border border-border">
                           {user?.name?.split(" ")?.[0]?.charAt(0)}
                           {user?.name?.split(" ")?.[1]?.charAt(0)}
                         </AvatarFallback>

@@ -42,137 +42,108 @@ em-emoji-picker {
 }
 
 @layer base {
+  /*
+    Neutrals carry a slight cool bias (hue 220) rather than being pure grey, so
+    they read as chosen instead of inherited — and it matches the cool sidebar
+    tokens this theme already used.
+
+    Two rules hold across both themes:
+      - the page is never pure white or near-black; both ends are pulled in so
+        long sessions are not glare or halation
+      - --card sits one step *toward* the viewer from --background, so panels
+        lift off the page instead of relying on their border alone
+  */
   :root {
-    --background: 0 0% 100%;
-
-    --foreground: 0 0% 3.9%;
-
+    /* surfaces: page 98% -> cards a clean 100% so they lift */
+    --background: 220 20% 98%;
+    --foreground: 220 18% 16%;
     --card: 0 0% 100%;
-
-    --card-foreground: 0 0% 3.9%;
-
+    --card-foreground: 220 18% 16%;
     --popover: 0 0% 100%;
+    --popover-foreground: 220 18% 16%;
 
-    --popover-foreground: 0 0% 3.9%;
+    /* a cool near-black rather than flat #171717 */
+    --primary: 220 20% 14%;
+    --primary-foreground: 220 20% 98%;
 
-    --primary: 0 0% 9%;
+    --secondary: 220 16% 95%;
+    --secondary-foreground: 220 18% 16%;
+    --muted: 220 16% 95%;
+    --muted-foreground: 220 10% 44%;
+    --accent: 220 16% 94%;
+    --accent-foreground: 220 18% 16%;
 
-    --primary-foreground: 0 0% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 96.1%;
-
-    --secondary-foreground: 0 0% 9%;
-
-    --muted: 0 0% 96.1%;
-
-    --muted-foreground: 0 0% 45.1%;
-
-    --accent: 0 0% 96.1%;
-
-    --accent-foreground: 0 0% 9%;
-
-    --destructive: 0 84.2% 60.2%;
-
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 89.8%;
-
-    --input: 0 0% 89.8%;
-
-    --ring: 0 0% 3.9%;
+    /* inputs a touch darker than borders so fields read as fields */
+    --border: 220 14% 90%;
+    --input: 220 14% 86%;
+    --ring: 220 18% 16%;
 
     --chart-1: 12 76% 61%;
-
     --chart-2: 173 58% 39%;
-
     --chart-3: 197 37% 24%;
-
     --chart-4: 43 74% 66%;
-
     --chart-5: 27 87% 67%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* sidebar recedes from the page rather than matching it */
+    --sidebar-background: 220 22% 96%;
+    --sidebar-foreground: 220 12% 30%;
+    --sidebar-primary: 220 20% 14%;
+    --sidebar-primary-foreground: 220 20% 98%;
+    --sidebar-accent: 220 16% 92%;
+    --sidebar-accent-foreground: 220 18% 16%;
+    --sidebar-border: 220 14% 89%;
+    --sidebar-ring: 217 91% 60%;
   }
+
   .dark {
-    --background: 0 0% 3.9%;
+    /* page lifted well off black; cards lifted again above the page */
+    --background: 220 14% 11%;
+    --foreground: 220 14% 92%;
+    --card: 220 14% 14%;
+    --card-foreground: 220 14% 92%;
+    --popover: 220 14% 14%;
+    --popover-foreground: 220 14% 92%;
 
-    --foreground: 0 0% 98%;
+    --primary: 220 14% 92%;
+    --primary-foreground: 220 20% 14%;
 
-    --card: 0 0% 3.9%;
+    --secondary: 220 12% 18%;
+    --secondary-foreground: 220 14% 92%;
+    --muted: 220 12% 18%;
+    --muted-foreground: 220 10% 65%;
+    --accent: 220 12% 20%;
+    --accent-foreground: 220 14% 92%;
 
-    --card-foreground: 0 0% 98%;
+    /* the default here was so dark it read as brown */
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
 
-    --popover: 0 0% 3.9%;
+    /* borders lifted above the old 14.9%, which was invisible on the page */
+    --border: 220 10% 22%;
+    --input: 220 10% 26%;
+    --ring: 220 14% 70%;
 
-    --popover-foreground: 0 0% 98%;
+    --chart-1: 220 70% 55%;
+    --chart-2: 160 60% 50%;
+    --chart-3: 30 80% 58%;
+    --chart-4: 280 65% 65%;
+    --chart-5: 340 75% 60%;
 
-    --primary: 0 0% 98%;
-
-    --primary-foreground: 0 0% 9%;
-
-    --secondary: 0 0% 14.9%;
-
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 0 0% 14.9%;
-
-    --muted-foreground: 0 0% 63.9%;
-
-    --accent: 0 0% 14.9%;
-
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 14.9%;
-
-    --input: 0 0% 14.9%;
-
-    --ring: 0 0% 83.1%;
-
-    --chart-1: 220 70% 50%;
-
-    --chart-2: 160 60% 45%;
-
-    --chart-3: 30 80% 55%;
-
-    --chart-4: 280 65% 60%;
-
-    --chart-5: 340 75% 55%;
-
-    --sidebar-background: 240 5.9% 10%;
-
-    --sidebar-foreground: 240 4.8% 95.9%;
-
-    --sidebar-primary: 224.3 76.3% 48%;
-
-    --sidebar-primary-foreground: 0 0% 100%;
-
-    --sidebar-accent: 240 3.7% 15.9%;
-
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-
-    --sidebar-border: 240 3.7% 15.9%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 220 16% 13%;
+    --sidebar-foreground: 220 12% 88%;
+    /* monochrome like the logo badge — the default flipped this to blue in
+       dark mode only, which made the workspace avatar change identity */
+    --sidebar-primary: 220 14% 90%;
+    --sidebar-primary-foreground: 220 20% 14%;
+    --sidebar-accent: 220 12% 20%;
+    --sidebar-accent-foreground: 220 14% 92%;
+    --sidebar-border: 220 10% 20%;
+    --sidebar-ring: 217 91% 60%;
   }
 }
 

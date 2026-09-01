@@ -11,9 +11,9 @@ const TableSkeleton: React.FC<TableSkeletonProps> = ({
   rows = 20,
 }) => {
   return (
-    <div className="w-full bg-white rounded-lg">
+    <div className="w-full bg-background rounded-lg">
       {/* Table Header Skeleton */}
-      <div className="flex h-10 bg-gray-50 rounded-t-lg">
+      <div className="flex h-10 bg-muted/50 rounded-t-lg">
         {[...Array(columns)].map((_, index) => (
           <div key={`header-col-${index}`} className={`flex-1 px-4 py-2`}>
             <Skeleton className="h-4 w-full rounded-lg" />

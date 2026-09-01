@@ -115,7 +115,7 @@ export default function EditProjectForm(props: {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-foreground">
                 Select Emoji
               </label>
               <Popover>
@@ -176,7 +176,7 @@ export default function EditProjectForm(props: {
 
             <Button
               disabled={isPending}
-              className="flex place-self-end  h-[40px] text-white font-semibold"
+              className="flex place-self-end  h-[40px]  font-semibold"
               type="submit"
             >
               {isPending && <Loader className="animate-spin" />}
