@@ -1,6 +1,7 @@
 import {
   PermissionType,
   TaskPriorityEnumType,
+  TaskSizeEnumType,
   TaskStatusEnumType,
 } from "@/constant";
 
@@ -221,6 +222,7 @@ export type CreateTaskPayloadType = {
     description: string;
     priority: TaskPriorityEnumType;
     status: TaskStatusEnumType;
+    size: TaskSizeEnumType;
     assignedTo: string;
     dueDate: string;
   };
@@ -237,6 +239,7 @@ export type EditTaskPayloadType = {
     description: string;
     priority: TaskPriorityEnumType;
     status: TaskStatusEnumType;
+    size: TaskSizeEnumType;
     assignedTo: string;
     dueDate: string;
   }>;
@@ -254,6 +257,7 @@ export type TaskType = {
   };
   priority: TaskPriorityEnumType;
   status: TaskStatusEnumType;
+  size: TaskSizeEnumType;
   assignedTo: {
     _id: string;
     name: string;
@@ -272,10 +276,29 @@ export type AllTaskPayloadType = {
   keyword?: string | null;
   priority?: TaskPriorityEnumType | null;
   status?: TaskStatusEnumType | null;
+  size?: TaskSizeEnumType | null;
   assignedTo?: string | null;
   dueDate?: string | null;
   pageNumber?: number | null;
   pageSize?: number | null;
+};
+
+//********** */ PRESENCE TYPES ***********************
+//************************************************* */
+
+export type MemberPresenceType = {
+  userId: string;
+  /** derived server-side from how stale lastSeenAt is — never stored */
+  online: boolean;
+  lastSeenAt: string | null;
+  sessionStartedAt: string | null;
+  activeMsToday: number;
+};
+
+export type WorkspacePresenceResponseType = {
+  message: string;
+  presence: MemberPresenceType[];
+  onlineWindowMs: number;
 };
 
 export type AllTaskResponseType = {

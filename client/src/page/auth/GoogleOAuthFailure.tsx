@@ -1,3 +1,6 @@
+// --- Google OAuth (disabled) ---
+// Kept for reference but unreachable: its route is commented out in
+// routes/common/routes.tsx.
 import Logo from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,10 +14,10 @@ const GoogleOAuthFailure = () => {
       <div className="flex w-full max-w-sm flex-col gap-6">
         <Link
           to="/"
-          className="flex items-center gap-2 self-center font-medium"
+          className="flex items-center gap-2 self-center font-medium tracking-tight"
         >
           <Logo />
-          Team Track.
+          Meridian
         </Link>
         <div className="flex flex-col gap-6"></div>
       </div>

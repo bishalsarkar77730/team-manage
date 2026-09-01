@@ -17,9 +17,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { getAvatarColor, getAvatarFallbackText } from "@/lib/helper";
+import {
+  activeTodayLabel,
+  presenceDetail,
+  presenceLabel,
+} from "@/lib/presence";
+import { cn } from "@/lib/utils";
 import { useAuthContext } from "@/context/auth-provider";
 import useWorkspaceId from "@/hooks/use-workspace-id";
 import useGetWorkspaceMembers from "@/hooks/api/use-get-workspace-members";
+import useWorkspacePresence from "@/hooks/api/use-workspace-presence";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { changeWorkspaceMemberRoleMutationFn } from "@/lib/api";
 import { toast } from "@/hooks/use-toast";
@@ -35,6 +42,11 @@ const AllMembers = () => {
   const { data, isPending } = useGetWorkspaceMembers(workspaceId);
   const members = data?.members || [];
   const roles = data?.roles || [];
+
+  const { data: presenceData } = useWorkspacePresence(workspaceId);
+  const presenceByUser = new Map(
+    (presenceData?.presence || []).map((entry) => [entry.userId, entry])
+  );
 
   const { mutate, isPending: isLoading } = useMutation({
     mutationFn: changeWorkspaceMemberRoleMutationFn,
@@ -80,18 +92,34 @@ const AllMembers = () => {
         const name = member.userId?.name;
         const initials = getAvatarFallbackText(name);
         const avatarColor = getAvatarColor(name);
+
+        const presence = presenceByUser.get(member.userId._id);
+        const isOnline = !!presence?.online;
+
         return (
-          <div className="flex items-center justify-between space-x-4">
+          <div
+            key={member.userId._id}
+            className="flex items-center justify-between space-x-4"
+          >
             <div className="flex items-center space-x-4">
-              <Avatar className="h-8 w-8">
-                <AvatarImage
-                  src={member.userId?.profilePicture || ""}
-                  alt="Image"
+              <div className="relative shrink-0">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage
+                    src={member.userId?.profilePicture || ""}
+                    alt="Image"
+                  />
+                  <AvatarFallback className={avatarColor}>
+                    {initials}
+                  </AvatarFallback>
+                </Avatar>
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background",
+                    isOnline ? "bg-emerald-500" : "bg-muted-foreground/40"
+                  )}
                 />
-                <AvatarFallback className={avatarColor}>
-                  {initials}
-                </AvatarFallback>
-              </Avatar>
+              </div>
               <div>
                 <p className="text-sm font-medium leading-none">{name}</p>
                 <p className="text-sm text-muted-foreground">
@@ -100,6 +128,27 @@ const AllMembers = () => {
               </div>
             </div>
             <div className="flex items-center gap-3">
+              <div
+                title={presenceDetail(presence) || undefined}
+                className="hidden sm:flex flex-col items-end text-xs leading-tight"
+              >
+                {presenceLabel(presence) ? (
+                  <span
+                    className={cn(
+                      isOnline
+                        ? "font-medium text-emerald-600"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    {presenceLabel(presence)}
+                  </span>
+                ) : null}
+                {activeTodayLabel(presence) ? (
+                  <span className="text-muted-foreground">
+                    {activeTodayLabel(presence)}
+                  </span>
+                ) : null}
+              </div>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button

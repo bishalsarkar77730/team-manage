@@ -13,7 +13,6 @@ const EmojiPickerComponent: React.FC<EmojiPickerComponentProps> = ({
 }) => {
   // Handle emoji selection
   const handleEmojiSelect = (emoji: { native: string }) => {
-    console.log(emoji, "emoji");
     onSelectEmoji(emoji.native); // Pass the selected emoji to parent component
   };
 

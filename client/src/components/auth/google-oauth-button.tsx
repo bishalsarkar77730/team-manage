@@ -1,3 +1,7 @@
+// --- Google OAuth (disabled) ---
+// Kept for reference but no longer rendered anywhere: the imports in
+// page/auth/Sign-in.tsx and page/auth/Sign-up.tsx are commented out, and the
+// backend /auth/google routes this points at are disabled too.
 import { baseURL } from "@/lib/base-url";
 import { Button } from "../ui/button";
 

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { DataTableFacetedFilter } from "./table/table-faceted-filter";
-import { priorities, statuses } from "./table/data";
+import { priorities, sizes, statuses } from "./table/data";
 import useTaskTableFilter from "@/hooks/use-task-table-filter";
 import { useQuery } from "@tanstack/react-query";
 import useWorkspaceId from "@/hooks/use-workspace-id";
@@ -53,6 +53,7 @@ const TaskTable = () => {
         keyword: filters.keyword,
         priority: filters.priority,
         status: filters.status,
+        size: filters.size,
         projectId: projectId || filters.projectId,
         assignedTo: filters.assigneeId,
         pageNumber,
@@ -188,6 +189,16 @@ const DataTableFilterToolbar: FC<DataTableFilterToolbarProps> = ({
         onFilterChange={(values) => handleFilterChange("priority", values)}
       />
 
+      {/* Size filter */}
+      <DataTableFacetedFilter
+        title="Size"
+        multiSelect={true}
+        options={sizes}
+        disabled={isLoading}
+        selectedValues={filters.size?.split(",") || []}
+        onFilterChange={(values) => handleFilterChange("size", values)}
+      />
+
       {/* Assigned To filter */}
       <DataTableFacetedFilter
         title="Assigned To"
@@ -221,6 +232,7 @@ const DataTableFilterToolbar: FC<DataTableFilterToolbarProps> = ({
               keyword: null,
               status: null,
               priority: null,
+              size: null,
               projectId: null,
               assigneeId: null,
             })

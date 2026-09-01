@@ -6,6 +6,7 @@ import { UserType, WorkspaceType } from "@/types/api.type";
 import useGetWorkspaceQuery from "@/hooks/api/use-get-workspace";
 import { useNavigate } from "react-router-dom";
 import usePermissions from "@/hooks/use-permissions";
+import usePresenceHeartbeat from "@/hooks/use-presence-heartbeat";
 import { PermissionType } from "@/constant";
 
 // Define the context shape
@@ -54,6 +55,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     }
   }, [navigate, workspaceError]);
+
+  // app-wide, so a user reads as active wherever they are — not only on the
+  // Members page, which is the only place presence is displayed
+  usePresenceHeartbeat(!!user);
 
   const permissions = usePermissions(user, workspace);
 

@@ -19,8 +19,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import Logo from "@/components/logo";
-import GoogleOauthButton from "@/components/auth/google-oauth-button";
+// --- Google OAuth (disabled) ---
+// import GoogleOauthButton from "@/components/auth/google-oauth-button";
 import { useMutation } from "@tanstack/react-query";
 import { registerMutationFn } from "@/lib/api";
 import { toast } from "@/hooks/use-toast";
@@ -60,7 +62,6 @@ const SignUp = () => {
         navigate("/");
       },
       onError: (error) => {
-        console.log(error);
         toast({
           title: "Error",
           description: error.message,
@@ -75,23 +76,22 @@ const SignUp = () => {
       <div className="flex w-full max-w-sm flex-col gap-6">
         <Link
           to="/"
-          className="flex items-center gap-2 self-center font-medium"
+          className="flex items-center gap-2 self-center font-medium tracking-tight"
         >
           <Logo />
-          Team Track.
+          Meridian
         </Link>
         <div className="flex flex-col gap-6">
           <Card>
             <CardHeader className="text-center">
               <CardTitle className="text-xl">Create an account</CardTitle>
-              <CardDescription>
-                Signup with your Email or Google account
-              </CardDescription>
+              <CardDescription>Signup with your Email</CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                   <div className="grid gap-6">
+                    {/* --- Google OAuth (disabled) ---
                     <div className="flex flex-col gap-4">
                       <GoogleOauthButton label="Signup" />
                     </div>
@@ -100,6 +100,7 @@ const SignUp = () => {
                         Or continue with
                       </span>
                     </div>
+                    */}
                     <div className="grid gap-2">
                       <div className="grid gap-2">
                         <FormField
@@ -155,8 +156,7 @@ const SignUp = () => {
                                 Password
                               </FormLabel>
                               <FormControl>
-                                <Input
-                                  type="password"
+                                <PasswordInput
                                   className="!h-[48px]"
                                   {...field}
                                 />

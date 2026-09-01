@@ -34,7 +34,7 @@ import {
   transformOptions,
 } from "@/lib/helper";
 import useWorkspaceId from "@/hooks/use-workspace-id";
-import { TaskPriorityEnum, TaskStatusEnum } from "@/constant";
+import { TaskPriorityEnum, TaskSizeEnum, TaskStatusEnum } from "@/constant";
 import useGetProjectsInWorkspaceQuery from "@/hooks/api/use-get-projects";
 import useGetWorkspaceMembers from "@/hooks/api/use-get-workspace-members";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -118,6 +118,9 @@ export default function CreateTaskForm(props: {
         required_error: "Priority is required",
       }
     ),
+    size: z.enum(Object.values(TaskSizeEnum) as [keyof typeof TaskSizeEnum], {
+      required_error: "Size is required",
+    }),
     assignedTo: z.string().trim().min(1, {
       message: "AssignedTo is required",
     }),
@@ -137,9 +140,11 @@ export default function CreateTaskForm(props: {
 
   const taskStatusList = Object.values(TaskStatusEnum);
   const taskPriorityList = Object.values(TaskPriorityEnum); // ["LOW", "MEDIUM", "HIGH"]
+  const taskSizeList = Object.values(TaskSizeEnum); // ["SMALL", "MEDIUM", "LARGE"]
 
   const statusOptions = transformOptions(taskStatusList);
   const priorityOptions = transformOptions(taskPriorityList);
+  const sizeOptions = transformOptions(taskSizeList);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     if (isPending) return;
@@ -444,6 +449,41 @@ export default function CreateTaskForm(props: {
                             value={priority.value}
                           >
                             {priority.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* {Size} */}
+            <div>
+              <FormField
+                control={form.control}
+                name="size"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Size</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a size" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {sizeOptions?.map((size) => (
+                          <SelectItem
+                            className="!capitalize"
+                            key={size.value}
+                            value={size.value}
+                          >
+                            {size.label}
                           </SelectItem>
                         ))}
                       </SelectContent>

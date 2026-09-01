@@ -119,7 +119,7 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="rounded-md border">
         {isLoading ? (
-          <TableSkeleton columns={6} rows={10} />
+          <TableSkeleton columns={7} rows={10} />
         ) : (
           <Table>
             <TableHeader>

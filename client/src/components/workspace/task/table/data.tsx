@@ -1,4 +1,4 @@
-import { TaskPriorityEnum, TaskStatusEnum } from "@/constant";
+import { TaskPriorityEnum, TaskSizeEnum, TaskStatusEnum } from "@/constant";
 import { transformOptions } from "@/lib/helper";
 import {
   ArrowDown,
@@ -7,6 +7,9 @@ import {
   CheckCircle,
   Circle,
   HelpCircle,
+  SignalHigh,
+  SignalLow,
+  SignalMedium,
   Timer,
   View,
 } from "lucide-react";
@@ -25,6 +28,14 @@ const priorityIcons = {
   [TaskPriorityEnum.HIGH]: ArrowUp,
 };
 
+// Ascending signal bars rather than arrows, so size stays visually distinct
+// from priority in the same row.
+const sizeIcons = {
+  [TaskSizeEnum.SMALL]: SignalLow,
+  [TaskSizeEnum.MEDIUM]: SignalMedium,
+  [TaskSizeEnum.LARGE]: SignalHigh,
+};
+
 export const statuses = transformOptions(
   Object.values(TaskStatusEnum),
   statusIcons
@@ -34,3 +45,5 @@ export const priorities = transformOptions(
   Object.values(TaskPriorityEnum),
   priorityIcons
 );
+
+export const sizes = transformOptions(Object.values(TaskSizeEnum), sizeIcons);

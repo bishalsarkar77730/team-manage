@@ -57,19 +57,19 @@ const InviteUser = () => {
       <div className="flex w-full max-w-md flex-col gap-6">
         <Link
           to="/"
-          className="flex items-center gap-2 self-center font-medium"
+          className="flex items-center gap-2 self-center font-medium tracking-tight"
         >
           <Logo />
-          Team Track.
+          Meridian
         </Link>
         <div className="flex flex-col gap-6">
           <Card>
             <CardHeader className="text-center">
               <CardTitle className="text-xl">
-                Hey there! You're invited to join a Team Track Workspace!
+                Hey there! You're invited to join a Meridian Workspace!
               </CardTitle>
               <CardDescription>
-                Looks like you need to be logged into your Team Track account to
+                Looks like you need to be logged into your Meridian account to
                 join this Workspace.
               </CardDescription>
             </CardHeader>

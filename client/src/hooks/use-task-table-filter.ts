@@ -1,6 +1,8 @@
 import {
   TaskPriorityEnum,
   TaskPriorityEnumType,
+  TaskSizeEnum,
+  TaskSizeEnumType,
   TaskStatusEnum,
   TaskStatusEnumType,
 } from "@/constant";
@@ -14,6 +16,7 @@ const useTaskTableFilter = () => {
     priority: parseAsStringEnum<TaskPriorityEnumType>(
       Object.values(TaskPriorityEnum)
     ),
+    size: parseAsStringEnum<TaskSizeEnumType>(Object.values(TaskSizeEnum)),
     keyword: parseAsString,
     projectId: parseAsString,
     assigneeId: parseAsString,

@@ -23,6 +23,7 @@ import {
   loginType,
   registerType,
   WorkspaceByIdResponseType,
+  WorkspacePresenceResponseType,
   EditWorkspaceType,
 } from "@/types/api.type";
 
@@ -80,6 +81,21 @@ export const getMembersInWorkspaceQueryFn = async (
 ): Promise<AllMembersInWorkspaceResponseType> => {
   const response = await API.get(`/workspace/members/${workspaceId}`);
   return response.data;
+};
+
+export const getWorkspacePresenceQueryFn = async (
+  workspaceId: string
+): Promise<WorkspacePresenceResponseType> => {
+  const response = await API.get(`/workspace/presence/${workspaceId}`);
+  return response.data;
+};
+
+/**
+ * Keeps an idle tab counted as active. Returns 204 with no body — the work
+ * happens in the server's presence middleware.
+ */
+export const sendHeartbeatFn = async (): Promise<void> => {
+  await API.post(`/user/heartbeat`);
 };
 
 export const getWorkspaceAnalyticsQueryFn = async (
@@ -226,6 +242,7 @@ export const getAllTasksQueryFn = async ({
   assignedTo,
   priority,
   status,
+  size,
   dueDate,
   pageNumber,
   pageSize,
@@ -238,6 +255,7 @@ export const getAllTasksQueryFn = async ({
   if (assignedTo) queryParams.append("assignedTo", assignedTo);
   if (priority) queryParams.append("priority", priority);
   if (status) queryParams.append("status", status);
+  if (size) queryParams.append("size", size);
   if (dueDate) queryParams.append("dueDate", dueDate);
   if (pageNumber) queryParams.append("pageNumber", pageNumber?.toString());
   if (pageSize) queryParams.append("pageSize", pageSize?.toString());

@@ -16,7 +16,7 @@ import {
   getAvatarColor,
   getAvatarFallbackText,
 } from "@/lib/helper";
-import { priorities, statuses } from "./data";
+import { priorities, sizes, statuses } from "./data";
 import { TaskType } from "@/types/api.type";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -199,6 +199,40 @@ export const getColumns = (projectId?: string): ColumnDef<TaskType>[] => {
             >
               <Icon className="h-4 w-4 rounded-full text-inherit" />
               <span>{priority.label}</span>
+            </Badge>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "size",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Size" />
+      ),
+      cell: ({ row }) => {
+        const size = sizes.find((size) => size.value === row.getValue("size"));
+
+        if (!size) {
+          return null;
+        }
+
+        const Icon = size.icon;
+
+        if (!Icon) {
+          return null;
+        }
+
+        // Neutral outline rather than a colour-coded variant: SMALL/MEDIUM/LARGE
+        // would collide with the priority variants in badge.tsx (both have a
+        // "MEDIUM" key), and a third colour-coded column makes the row noisy.
+        return (
+          <div className="flex items-center">
+            <Badge
+              variant="outline"
+              className="flex lg:w-[100px] p-1 gap-1 font-medium uppercase text-muted-foreground"
+            >
+              <Icon className="h-4 w-4 text-inherit" />
+              <span>{size.label}</span>
             </Badge>
           </div>
         );

@@ -28,7 +28,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "../../ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import useWorkspaceId from "@/hooks/use-workspace-id";
-import { TaskPriorityEnum, TaskStatusEnum } from "@/constant";
+import { TaskPriorityEnum, TaskSizeEnum, TaskStatusEnum } from "@/constant";
 import useGetWorkspaceMembers from "@/hooks/api/use-get-workspace-members";
 import { editTaskMutationFn } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -63,11 +63,17 @@ export default function EditTaskForm({ task, onClose }: { task: TaskType; onClos
     value: priority,
   }));
 
+  const sizeOptions = Object.values(TaskSizeEnum).map((size) => ({
+    label: size.charAt(0) + size.slice(1).toLowerCase(),
+    value: size,
+  }));
+
   const formSchema = z.object({
     title: z.string().trim().min(1, { message: "Title is required" }),
     description: z.string().trim(),
     status: z.enum(Object.values(TaskStatusEnum) as [keyof typeof TaskStatusEnum]),
     priority: z.enum(Object.values(TaskPriorityEnum) as [keyof typeof TaskPriorityEnum]),
+    size: z.enum(Object.values(TaskSizeEnum) as [keyof typeof TaskSizeEnum]),
     assignedTo: z.string().trim().min(1, { message: "AssignedTo is required" }),
     dueDate: z.date({ required_error: "A due date is required." }),
   });
@@ -79,6 +85,8 @@ export default function EditTaskForm({ task, onClose }: { task: TaskType; onClos
       description: task?.description ?? "",
       status: task?.status ?? "TODO",
       priority: task?.priority ?? "MEDIUM",
+      // tasks created before `size` existed come back without one
+      size: task?.size ?? "MEDIUM",
       assignedTo: task.assignedTo?._id ?? "",
       dueDate: task?.dueDate ? new Date(task.dueDate) : new Date(),
     },
@@ -207,6 +215,22 @@ export default function EditTaskForm({ task, onClose }: { task: TaskType; onClos
                   <SelectContent>
                     {priorityOptions.map((priority) => (
                       <SelectItem key={priority.value} value={priority.value}>{priority.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )} />
+
+            {/* Size */}
+            <FormField control={form.control} name="size" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Size</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
+                  <FormControl><SelectTrigger><SelectValue placeholder="Select size" /></SelectTrigger></FormControl>
+                  <SelectContent>
+                    {sizeOptions.map((size) => (
+                      <SelectItem key={size.value} value={size.value}>{size.label}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
