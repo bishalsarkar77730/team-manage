@@ -16,7 +16,7 @@ const InviteMember = () => {
   const inviteUrl = workspace
     ? `${window.location.origin}${BASE_ROUTE.INVITE_URL.replace(
         ":inviteCode",
-        workspace.inviteCode
+        workspace.inviteCode,
       )}`
     : "";
 

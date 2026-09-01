@@ -53,12 +53,12 @@ const RecentProjects = () => {
                 to={`/workspace/${workspaceId}/project/${project._id}`}
                 className="grid gap-8 p-0"
               >
-                <div className="flex items-start gap-2">
+                <div className="flex min-w-0 items-start gap-2">
                   <div className="text-xl !leading-[1.4rem]">
                     {project.emoji}
                   </div>
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">
+                  <div className="grid min-w-0 gap-1">
+                    <p className="truncate text-sm font-medium leading-none">
                       {project.name}
                     </p>
                     <p className="text-sm text-muted-foreground">
@@ -67,8 +67,10 @@ const RecentProjects = () => {
                         : null}
                     </p>
                   </div>
-                  <div className="ml-auto flex items-center gap-4">
-                    <span className="text-sm text-muted-foreground">Created by</span>
+                  <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-4">
+                    <span className="hidden text-sm text-muted-foreground sm:inline">
+                      Created by
+                    </span>
                     <Avatar className="hidden h-9 w-9 sm:flex">
                       <AvatarImage
                         src={project.createdBy.profilePicture || ""}

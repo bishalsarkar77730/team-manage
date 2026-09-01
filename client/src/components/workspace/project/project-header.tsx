@@ -42,9 +42,11 @@ const ProjectHeader = () => {
     );
   };
   return (
-    <div className="flex items-center justify-between space-y-2">
-      <div className="flex items-center gap-2">
-        <h2 className="flex items-center gap-3 text-xl font-medium truncate tracking-tight">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+      {/* min-w-0 on both the row and the heading, or truncate has nothing to
+          truncate against and a long project name pushes the button away */}
+      <div className="flex min-w-0 items-center gap-2">
+        <h2 className="flex min-w-0 items-center gap-3 truncate text-lg sm:text-xl font-medium tracking-tight">
           {renderContent()}
         </h2>
         <PermissionsGuard requiredPermission={Permissions.EDIT_PROJECT}>

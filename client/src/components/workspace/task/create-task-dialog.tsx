@@ -11,15 +11,17 @@ const CreateTaskDialog = (props: { projectId?: string }) => {
     setIsOpen(false);
   };
   return (
-    <div>
+    <div className="w-full sm:w-auto">
       <Dialog modal={true} open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger>
-          <Button>
+        {/* asChild so the trigger does not wrap the button in a second button,
+            and so the full-width class actually reaches the control */}
+        <DialogTrigger asChild>
+          <Button className="w-full sm:w-auto shrink-0">
             <Plus />
             New Task
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-lg max-h-auto my-5 border-0">
+        <DialogContent className="!flex max-h-[85dvh] flex-col gap-0 overflow-hidden border-0 !p-0 sm:max-w-[560px]">
           <CreateTaskForm projectId={props.projectId} onClose={onClose} />
         </DialogContent>
       </Dialog>

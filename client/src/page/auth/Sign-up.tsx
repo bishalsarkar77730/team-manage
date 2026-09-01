@@ -4,13 +4,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Form,
   FormControl,
   FormField,
@@ -20,9 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
-import Logo from "@/components/logo";
-// --- Google OAuth (disabled) ---
-// import GoogleOauthButton from "@/components/auth/google-oauth-button";
+import AuthShell from "@/components/auth/auth-shell";
 import { useMutation } from "@tanstack/react-query";
 import { registerMutationFn } from "@/lib/api";
 import { toast } from "@/hooks/use-toast";
@@ -34,12 +25,13 @@ const SignUp = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: registerMutationFn,
   });
+
   const formSchema = z.object({
     name: z.string().trim().min(1, {
       message: "Name is required",
     }),
     email: z.string().trim().email("Invalid email address").min(1, {
-      message: "Workspace name is required",
+      message: "Email is required",
     }),
     password: z.string().trim().min(1, {
       message: "Password is required",
@@ -72,128 +64,92 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
-      <div className="flex w-full max-w-sm flex-col gap-6">
-        <Link
-          to="/"
-          className="flex items-center gap-2 self-center font-medium tracking-tight"
-        >
-          <Logo />
-          Meridian
-        </Link>
-        <div className="flex flex-col gap-6">
-          <Card>
-            <CardHeader className="text-center">
-              <CardTitle className="text-xl">Create an account</CardTitle>
-              <CardDescription>Signup with your Email</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                  <div className="grid gap-6">
-                    {/* --- Google OAuth (disabled) ---
-                    <div className="flex flex-col gap-4">
-                      <GoogleOauthButton label="Signup" />
-                    </div>
-                    <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-                      <span className="relative z-10 bg-background px-2 text-muted-foreground">
-                        Or continue with
-                      </span>
-                    </div>
-                    */}
-                    <div className="grid gap-2">
-                      <div className="grid gap-2">
-                        <FormField
-                          control={form.control}
-                          name="name"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="dark:text-[#f1f7feb5] text-sm">
-                                Name
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder="Joh Doe"
-                                  className="!h-[48px]"
-                                  {...field}
-                                />
-                              </FormControl>
+    <AuthShell
+      eyebrow="Get started"
+      title="Create your Meridian account"
+      subtitle="Your first workspace is set up for you automatically."
+      footer={
+        <>
+          Already have an account?{" "}
+          <Link
+            to="/"
+            className="font-medium text-foreground underline decoration-muted-foreground/40 underline-offset-4 hover:decoration-foreground"
+          >
+            Sign in
+          </Link>
+        </>
+      }
+    >
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium">Name</FormLabel>
+                <FormControl>
+                  <Input
+                    autoComplete="name"
+                    placeholder="Bishal Sarkar"
+                    className="!h-11"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <FormField
-                          control={form.control}
-                          name="email"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="dark:text-[#f1f7feb5] text-sm">
-                                Email
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder="m@example.com"
-                                  className="!h-[48px]"
-                                  {...field}
-                                />
-                              </FormControl>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium">Email</FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    autoComplete="email"
+                    placeholder="you@company.com"
+                    className="!h-11"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <FormField
-                          control={form.control}
-                          name="password"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="dark:text-[#f1f7feb5] text-sm">
-                                Password
-                              </FormLabel>
-                              <FormControl>
-                                <PasswordInput
-                                  className="!h-[48px]"
-                                  {...field}
-                                />
-                              </FormControl>
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium">Password</FormLabel>
+                <FormControl>
+                  <PasswordInput
+                    autoComplete="new-password"
+                    className="!h-11"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      <Button
-                        type="submit"
-                        disabled={isPending}
-                        className="w-full"
-                      >
-                        {isPending && <Loader className="animate-spin" />}
-                        Sign up
-                      </Button>
-                    </div>
-                    <div className="text-center text-sm">
-                      Already have an account?{" "}
-                      <Link to="/" className="underline underline-offset-4">
-                        Sign in
-                      </Link>
-                    </div>
-                  </div>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
-          <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-            By clicking continue, you agree to our{" "}
-            <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
-          </div>
-        </div>
-      </div>
-    </div>
+          <Button
+            disabled={isPending}
+            type="submit"
+            className="!mt-7 h-11 w-full text-[15px] font-medium"
+          >
+            {isPending && <Loader className="animate-spin" />}
+            Create account
+          </Button>
+        </form>
+      </Form>
+    </AuthShell>
   );
 };
 

@@ -7,35 +7,40 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RecentProjects from "@/components/workspace/project/recent-projects";
 import RecentTasks from "@/components/workspace/task/recent-tasks";
 import RecentMembers from "@/components/workspace/member/recent-members";
+import PageHeader from "@/components/resuable/page-header";
 const WorkspaceDashboard = () => {
   const { onOpen } = useCreateProjectDialog();
   return (
     <main className="flex flex-1 flex-col py-4 md:pt-3">
-      <div className="flex items-center justify-between space-y-2 mb-6">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">
-            Workspace Overview
-          </h2>
-          <p className="text-muted-foreground">
-            Here&apos;s an overview for this workspace!
-          </p>
-        </div>
-        <Button onClick={onOpen}>
-          <Plus />
-          New Project
-        </Button>
-      </div>
+      <PageHeader
+        eyebrow="Overview"
+        title="Workspace overview"
+        description="Where your projects, tasks and people stand right now."
+        className="mb-6"
+        actions={
+          <Button onClick={onOpen} className="w-full sm:w-auto">
+            <Plus />
+            New project
+          </Button>
+        }
+      />
       <WorkspaceAnalytics />
-      <div className="mt-4">
-        <Tabs defaultValue="projects" className="w-full border rounded-lg p-2">
-          <TabsList className="w-full justify-start border-0 bg-muted/50 px-1 h-12">
-            <TabsTrigger className="py-2" value="projects">
+
+      <section className="mt-6">
+        <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          Recent activity
+        </h2>
+        <Tabs defaultValue="projects" className="w-full rounded-lg border p-2">
+          {/* three labels do not fit at 320px, so the strip scrolls rather than
+              crushing the labels or wrapping the row */}
+          <TabsList className="w-full justify-start border-0 bg-muted/50 px-1 h-12 overflow-x-auto no-scrollbar">
+            <TabsTrigger className="py-2 shrink-0" value="projects">
               Recent Projects
             </TabsTrigger>
-            <TabsTrigger className="py-2" value="tasks">
+            <TabsTrigger className="py-2 shrink-0" value="tasks">
               Recent Tasks
             </TabsTrigger>
-            <TabsTrigger className="py-2" value="members">
+            <TabsTrigger className="py-2 shrink-0" value="members">
               Recent Members
             </TabsTrigger>
           </TabsList>
@@ -49,7 +54,7 @@ const WorkspaceDashboard = () => {
             <RecentMembers />
           </TabsContent>
         </Tabs>
-      </div>
+      </section>
     </main>
   );
 };

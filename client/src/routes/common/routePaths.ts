@@ -15,6 +15,11 @@ export const PROTECTED_ROUTES = {
   MEMBERS: "/workspace/:workspaceId/members",
   SETTINGS: "/workspace/:workspaceId/settings",
   PROJECT_DETAILS: "/workspace/:workspaceId/project/:projectId",
+  // personal, per-workspace: only the signed-in user's own items
+  MY_DASHBOARD: "/workspace/:workspaceId/my-dashboard",
+  MY_TASKS: "/workspace/:workspaceId/my-tasks",
+  MY_MEETINGS: "/workspace/:workspaceId/my-meetings",
+  MY_NOTES: "/workspace/:workspaceId/my-notes",
 };
 
 export const BASE_ROUTE = {

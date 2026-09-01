@@ -1,6 +1,13 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Activity, ArrowBigUp, ArrowBigDown, Loader } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Loader, TrendingDown, TrendingUp } from "lucide-react";
 
+import { cn } from "@/lib/utils";
+
+/**
+ * A stat tile. The number leads, the label sits above it small and muted, and
+ * the trend arrow is semantic (green = good, red = needs attention) — which for
+ * "Overdue" means the arrow logic inverts.
+ */
 const AnalyticsCard = (props: {
   title: string;
   value: number;
@@ -8,39 +15,37 @@ const AnalyticsCard = (props: {
 }) => {
   const { title, value, isLoading } = props;
 
-  const getArrowIcon = () => {
-    if (title === "Overdue Task") {
-      return value > 0 ? (
-        <ArrowBigDown strokeWidth={2.5} className="h-4 w-4 text-red-500" />
-      ) : (
-        <ArrowBigUp strokeWidth={2.5} className="h-4 w-4 text-green-500" />
-      );
-    }
-    if (title === "Completed Task" || title === "Total Task") {
-      return value > 0 ? (
-        <ArrowBigUp strokeWidth={2.5} className="h-4 w-4 text-green-500" />
-      ) : (
-        <ArrowBigDown strokeWidth={2.5} className="h-4 w-4 text-red-500" />
-      );
-    }
-    return null;
-  };
+  const isOverdue = title.toLowerCase().includes("overdue");
+  // for overdue, more is worse; for everything else more is better
+  const good = isOverdue ? value === 0 : value > 0;
+  const Icon = good ? TrendingUp : TrendingDown;
+
   return (
-    <Card className="shadow-none w-full">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <div className="flex items-center gap-1">
-          <CardTitle className="text-sm font-medium">{title}</CardTitle>
-          <div className="mb-[0.2px]">{getArrowIcon()}</div>
+    <Card className="w-full border shadow-none transition-colors hover:border-foreground/20">
+      <CardContent className="p-5">
+        <div className="flex items-start justify-between gap-3">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            {title}
+          </p>
+          <span
+            aria-hidden="true"
+            className={cn(
+              "flex size-6 shrink-0 items-center justify-center rounded-md",
+              good
+                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                : "bg-destructive/10 text-destructive"
+            )}
+          >
+            <Icon className="size-3.5" strokeWidth={2.5} />
+          </span>
         </div>
-        <Activity
-          strokeWidth={2.5}
-          className="h-4 w-4  text-muted-foreground"
-        />
-      </CardHeader>
-      <CardContent className="w-full">
-        <div className="text-3xl font-bold">
-          {isLoading ? <Loader className="w-6 h-6 animate-spin" /> : value}
-        </div>
+        <p className="mt-3 text-3xl font-semibold tabular-nums tracking-tight">
+          {isLoading ? (
+            <Loader className="size-6 animate-spin text-muted-foreground" />
+          ) : (
+            value
+          )}
+        </p>
       </CardContent>
     </Card>
   );

@@ -59,7 +59,7 @@ export function DataTable<TData, TValue>({
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -88,11 +88,18 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="w-full space-y-2">
-      <div className="block w-full lg:flex lg:items-center lg:justify-between">
-        {filtersToolbar && <div className="flex-1"> {filtersToolbar}</div>}
+      <div className="flex w-full flex-col gap-2 lg:flex-row lg:items-center lg:justify-between lg:gap-4">
+        {filtersToolbar && (
+          <div className="min-w-0 flex-1">{filtersToolbar}</div>
+        )}
         <DropdownMenu>
+          {/* self-end rather than full width: it does not need a whole row of
+              its own on a phone */}
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto w-full lg:w-auto">
+            <Button
+              variant="outline"
+              className="h-8 shrink-0 self-end lg:ml-auto lg:h-9"
+            >
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
@@ -121,7 +128,10 @@ export function DataTable<TData, TValue>({
         {isLoading ? (
           <TableSkeleton columns={7} rows={10} />
         ) : (
-          <Table>
+          // The wrapper already scrolls sideways. The floor means columns keep
+          // usable widths and you swipe, instead of every cell being crushed
+          // until titles wrap to four lines.
+          <Table className="min-w-[820px]">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
@@ -132,7 +142,7 @@ export function DataTable<TData, TValue>({
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                       </TableHead>
                     );
@@ -151,7 +161,7 @@ export function DataTable<TData, TValue>({
                       <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </TableCell>
                     ))}

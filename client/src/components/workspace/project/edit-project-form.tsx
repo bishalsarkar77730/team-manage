@@ -25,6 +25,7 @@ import useWorkspaceId from "@/hooks/use-workspace-id";
 import { editProjectMutationFn } from "@/lib/api";
 import { toast } from "@/hooks/use-toast";
 import { Loader } from "lucide-react";
+import DialogShell, { OptionalChip } from "@/components/resuable/dialog-shell";
 
 export default function EditProjectForm(props: {
   project?: ProjectType;
@@ -99,92 +100,93 @@ export default function EditProjectForm(props: {
   };
 
   return (
-    <div className="w-full h-auto max-w-full">
-      <div className="h-full">
-        <div className="mb-5 pb-2 border-b">
-          <h1
-            className="text-xl tracking-[-0.16px] dark:text-[#fcfdffef] font-semibold mb-1
-           text-center sm:text-left"
-          >
-            Edit Project
-          </h1>
-          <p className="text-muted-foreground text-sm leading-tight">
-            Update the project details to refine task management
-          </p>
-        </div>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-foreground">
-                Select Emoji
-              </label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="font-normal size-[60px] !p-2 !shadow-none mt-2 items-center rounded-full "
-                  >
-                    <span className="text-4xl">{emoji}</span>
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent align="start" className=" !p-0">
-                  <EmojiPickerComponent onSelectEmoji={handleEmojiSelection} />
-                </PopoverContent>
-              </Popover>
-            </div>
-            <div className="mb-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="dark:text-[#f1f7feb5] text-sm">
-                      Project title
+    <DialogShell
+      eyebrow="Edit project"
+      title="Update this project"
+      description="Change the name, icon or description your team sees."
+    >
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <div>
+            <label className="block text-sm font-medium">Icon</label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="mt-2 size-14 items-center rounded-xl !p-2 font-normal !shadow-none"
+                >
+                  <span className="text-3xl">{emoji}</span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="start" className=" !p-0">
+                <EmojiPickerComponent onSelectEmoji={handleEmojiSelection} />
+              </PopoverContent>
+            </Popover>
+          </div>
+          <div>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">
+                    Project title
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="" className="!h-11" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div>
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center gap-2">
+                    <FormLabel className="text-sm font-medium">
+                      Description
                     </FormLabel>
-                    <FormControl>
-                      <Input placeholder="" className="!h-[48px]" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="mb-4">
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="dark:text-[#f1f7feb5] text-sm">
-                      Project description
-                      <span className="text-xs font-extralight ml-2">
-                        Optional
-                      </span>
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        rows={4}
-                        placeholder="Projects description"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                    <OptionalChip />
+                  </div>
+                  <FormControl>
+                    <Textarea
+                      rows={3}
+                      className="resize-none"
+                      placeholder="What is this project for?"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
+          <div className="flex flex-col-reverse gap-2 pt-1 sm:flex-row sm:justify-end">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={onClose}
+              disabled={isPending}
+              className="h-11 sm:h-10"
+            >
+              Cancel
+            </Button>
             <Button
               disabled={isPending}
-              className="flex place-self-end  h-[40px]  font-semibold"
+              className="h-11 font-medium sm:h-10"
               type="submit"
             >
               {isPending && <Loader className="animate-spin" />}
-              Update
+              Save changes
             </Button>
-          </form>
-        </Form>
-      </div>
-    </div>
+          </div>
+        </form>
+      </Form>
+    </DialogShell>
   );
 }

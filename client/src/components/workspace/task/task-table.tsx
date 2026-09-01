@@ -25,9 +25,12 @@ interface DataTableFilterToolbarProps {
   projectId?: string;
   filters: Filters;
   setFilters: SetFilters;
+  /** on My Tasks every row is already yours, so the filter is noise */
+  hideAssigneeFilter?: boolean;
 }
 
-const TaskTable = () => {
+/** `mine` asks the server for only the caller's own tasks (My Tasks page). */
+const TaskTable = ({ mine = false }: { mine?: boolean }) => {
   const param = useParams();
   const projectId = param.projectId as string;
 
@@ -46,6 +49,7 @@ const TaskTable = () => {
       pageNumber,
       filters,
       projectId,
+      mine,
     ],
     queryFn: () =>
       getAllTasksQueryFn({
@@ -58,6 +62,7 @@ const TaskTable = () => {
         assignedTo: filters.assigneeId,
         pageNumber,
         pageSize,
+        mine,
       }),
     staleTime: 0,
   });
@@ -93,6 +98,7 @@ const TaskTable = () => {
             projectId={projectId}
             filters={filters}
             setFilters={setFilters}
+            hideAssigneeFilter={mine}
           />
         }
       />
@@ -105,6 +111,7 @@ const DataTableFilterToolbar: FC<DataTableFilterToolbarProps> = ({
   projectId,
   filters,
   setFilters,
+  hideAssigneeFilter,
 }) => {
   const workspaceId = useWorkspaceId();
 
@@ -158,7 +165,7 @@ const DataTableFilterToolbar: FC<DataTableFilterToolbarProps> = ({
   };
 
   return (
-    <div className="flex flex-col lg:flex-row w-full items-start space-y-2 mb-2 lg:mb-0 lg:space-x-2  lg:space-y-0">
+    <div className="mb-2 flex w-full flex-col gap-2 lg:mb-0 lg:flex-row lg:items-center">
       <Input
         placeholder="Filter tasks..."
         value={filters.keyword || ""}
@@ -167,81 +174,89 @@ const DataTableFilterToolbar: FC<DataTableFilterToolbarProps> = ({
             keyword: e.target.value,
           })
         }
-        className="h-8 w-full lg:w-[250px]"
+        className="h-8 w-full lg:w-[250px] lg:shrink-0"
       />
-      {/* Status filter */}
-      <DataTableFacetedFilter
-        title="Status"
-        multiSelect={true}
-        options={statuses}
-        disabled={isLoading}
-        selectedValues={filters.status?.split(",") || []}
-        onFilterChange={(values) => handleFilterChange("status", values)}
-      />
-
-      {/* Priority filter */}
-      <DataTableFacetedFilter
-        title="Priority"
-        multiSelect={true}
-        options={priorities}
-        disabled={isLoading}
-        selectedValues={filters.priority?.split(",") || []}
-        onFilterChange={(values) => handleFilterChange("priority", values)}
-      />
-
-      {/* Size filter */}
-      <DataTableFacetedFilter
-        title="Size"
-        multiSelect={true}
-        options={sizes}
-        disabled={isLoading}
-        selectedValues={filters.size?.split(",") || []}
-        onFilterChange={(values) => handleFilterChange("size", values)}
-      />
-
-      {/* Assigned To filter */}
-      <DataTableFacetedFilter
-        title="Assigned To"
-        multiSelect={true}
-        options={assigneesOptions}
-        disabled={isLoading}
-        selectedValues={filters.assigneeId?.split(",") || []}
-        onFilterChange={(values) => handleFilterChange("assigneeId", values)}
-      />
-
-      {!projectId && (
+      {/* Below lg the facets scroll sideways in one row. Stacked full-width
+          they took five rows and pushed the table off the first screen. */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar lg:overflow-visible lg:pb-0">
+        {/* Status filter */}
         <DataTableFacetedFilter
-          title="Projects"
-          multiSelect={false}
-          options={projectOptions}
+          title="Status"
+          multiSelect={true}
+          options={statuses}
           disabled={isLoading}
-          selectedValues={filters.projectId?.split(",") || []}
-          onFilterChange={(values) => handleFilterChange("projectId", values)}
+          selectedValues={filters.status?.split(",") || []}
+          onFilterChange={(values) => handleFilterChange("status", values)}
         />
-      )}
 
-      {Object.values(filters).some(
-        (value) => value !== null && value !== ""
-      ) && (
-        <Button
+        {/* Priority filter */}
+        <DataTableFacetedFilter
+          title="Priority"
+          multiSelect={true}
+          options={priorities}
           disabled={isLoading}
-          variant="ghost"
-          className="h-8 px-2 lg:px-3"
-          onClick={() =>
-            setFilters({
-              keyword: null,
-              status: null,
-              priority: null,
-              size: null,
-              projectId: null,
-              assigneeId: null,
-            })
-          }
-        >
-          Reset
-          <X />
-        </Button>
-      )}
+          selectedValues={filters.priority?.split(",") || []}
+          onFilterChange={(values) => handleFilterChange("priority", values)}
+        />
+
+        {/* Size filter */}
+        <DataTableFacetedFilter
+          title="Size"
+          multiSelect={true}
+          options={sizes}
+          disabled={isLoading}
+          selectedValues={filters.size?.split(",") || []}
+          onFilterChange={(values) => handleFilterChange("size", values)}
+        />
+
+        {/* Assigned To filter */}
+        {!hideAssigneeFilter && (
+          <DataTableFacetedFilter
+            title="Assigned To"
+            multiSelect={true}
+            options={assigneesOptions}
+            disabled={isLoading}
+            selectedValues={filters.assigneeId?.split(",") || []}
+            onFilterChange={(values) =>
+              handleFilterChange("assigneeId", values)
+            }
+          />
+        )}
+
+        {!projectId && (
+          <DataTableFacetedFilter
+            title="Projects"
+            multiSelect={false}
+            options={projectOptions}
+            disabled={isLoading}
+            selectedValues={filters.projectId?.split(",") || []}
+            onFilterChange={(values) => handleFilterChange("projectId", values)}
+          />
+        )}
+
+        {Object.values(filters).some(
+          (value) => value !== null && value !== "",
+        ) && (
+          <Button
+            disabled={isLoading}
+            variant="ghost"
+            className="h-8 shrink-0 px-2 lg:px-3"
+            onClick={() =>
+              setFilters({
+                keyword: null,
+                status: null,
+                priority: null,
+                size: null,
+                projectId: null,
+                assigneeId: null,
+              })
+            }
+          >
+            Reset
+            <X />
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

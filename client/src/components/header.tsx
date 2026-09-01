@@ -23,6 +23,10 @@ const Header = () => {
     if (pathname.includes("/settings")) return "Settings";
     if (pathname.includes("/tasks")) return "Tasks";
     if (pathname.includes("/members")) return "Members";
+    if (pathname.includes("/my-dashboard")) return "My Dashboard";
+    if (pathname.includes("/my-tasks")) return "My Tasks";
+    if (pathname.includes("/my-meetings")) return "My Meetings";
+    if (pathname.includes("/my-notes")) return "My Notes";
     return null; // Default label
   };
 

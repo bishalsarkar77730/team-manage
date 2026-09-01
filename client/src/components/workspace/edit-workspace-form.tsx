@@ -19,6 +19,7 @@ import { editWorkspaceMutationFn } from "@/lib/api";
 import useWorkspaceId from "@/hooks/use-workspace-id";
 import { toast } from "@/hooks/use-toast";
 import { Loader } from "lucide-react";
+import { OptionalChip } from "@/components/resuable/dialog-shell";
 import { Permissions } from "@/constant";
 
 export default function EditWorkspaceForm() {
@@ -82,13 +83,15 @@ export default function EditWorkspaceForm() {
   return (
     <div className="w-full h-auto max-w-full">
       <div className="h-full">
-        <div className="mb-5 border-b">
-          <h1
-            className="text-[17px] tracking-[-0.16px] dark:text-[#fcfdffef] font-semibold mb-1.5
-           text-center sm:text-left"
-          >
-            Edit Workspace
-          </h1>
+        {/* a settings section, not a dialog — same type scale as the delete
+            card below it so the two read as siblings */}
+        <div className="mb-4 border-b pb-3">
+          <h2 className="text-[17px] font-semibold tracking-tight">
+            Workspace details
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            The name and description your members see.
+          </p>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -98,7 +101,7 @@ export default function EditWorkspaceForm() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="dark:text-[#f1f7feb5] text-sm">
+                    <FormLabel className="text-sm font-medium">
                       Workspace name
                     </FormLabel>
                     <FormControl>
@@ -120,11 +123,9 @@ export default function EditWorkspaceForm() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="dark:text-[#f1f7feb5] text-sm">
+                    <FormLabel className="text-sm font-medium">
                       Workspace description
-                      <span className="text-xs font-extralight ml-2">
-                        Optional
-                      </span>
+                      <OptionalChip />
                     </FormLabel>
                     <FormControl>
                       <Textarea

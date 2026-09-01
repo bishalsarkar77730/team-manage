@@ -26,6 +26,33 @@ export const MeridianMark = ({ className }: { className?: string }) => (
   </svg>
 );
 
+/**
+ * The mark opened out into a full graticule — the sphere, two meridian
+ * ellipses, the equator and two parallels. Used as low-opacity brand texture
+ * behind headings (auth pages, the create-workspace dialog) so those surfaces
+ * carry the identity without needing stock imagery.
+ *
+ * Strokes are `currentColor`, so set the colour on the element and it works on
+ * either theme.
+ */
+export const MeridianGraticule = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 400 400"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1"
+    aria-hidden="true"
+    className={className}
+  >
+    <circle cx="200" cy="200" r="190" />
+    <ellipse cx="200" cy="200" rx="62" ry="190" />
+    <ellipse cx="200" cy="200" rx="128" ry="190" />
+    <path d="M10 200h380" />
+    <path d="M38 108q162-46 324 0" />
+    <path d="M38 292q162 46 324 0" />
+  </svg>
+);
+
 const Logo = (props: { url?: string; className?: string }) => {
   const { url = "/", className } = props;
   return (

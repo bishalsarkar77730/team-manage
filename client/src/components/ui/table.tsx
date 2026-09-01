@@ -6,7 +6,18 @@ const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div className="relative w-full overflow-auto">
+  // Scrolling shadows: the two `local` layers are the white caps that sit on
+  // the content and slide away as you scroll, revealing the `scroll` gradients
+  // pinned to each edge. A wide table then reads as swipeable instead of
+  // looking like its last column was cut off by a bug.
+  <div
+    className="relative w-full overflow-auto
+      [background-attachment:local,local,scroll,scroll]
+      [background-image:linear-gradient(to_right,hsl(var(--card))_30%,transparent),linear-gradient(to_left,hsl(var(--card))_30%,transparent),linear-gradient(to_right,hsl(var(--foreground)/0.12),transparent),linear-gradient(to_left,hsl(var(--foreground)/0.12),transparent)]
+      [background-position:0_0,100%_0,0_0,100%_0]
+      [background-repeat:no-repeat]
+      [background-size:24px_100%,24px_100%,12px_100%,12px_100%]"
+  >
     <table
       ref={ref}
       className={cn("w-full caption-bottom text-sm", className)}

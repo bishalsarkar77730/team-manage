@@ -130,6 +130,8 @@ export type AnalyticsResponseType = {
   analytics: {
     totalTasks: number;
     overdueTasks: number;
+    /** may be absent on an older server response */
+    inReviewTasks?: number;
     completedTasks: number;
   };
 };
@@ -223,7 +225,7 @@ export type CreateTaskPayloadType = {
     priority: TaskPriorityEnumType;
     status: TaskStatusEnumType;
     size: TaskSizeEnumType;
-    assignedTo: string;
+    assignedTo: string[];
     dueDate: string;
   };
 };
@@ -240,7 +242,7 @@ export type EditTaskPayloadType = {
     priority: TaskPriorityEnumType;
     status: TaskStatusEnumType;
     size: TaskSizeEnumType;
-    assignedTo: string;
+    assignedTo: string[];
     dueDate: string;
   }>;
 };
@@ -258,11 +260,12 @@ export type TaskType = {
   priority: TaskPriorityEnumType;
   status: TaskStatusEnumType;
   size: TaskSizeEnumType;
+  /** a task can belong to several members; all of them can see and edit it */
   assignedTo: {
     _id: string;
     name: string;
     profilePicture: string | null;
-  } | null;
+  }[];
   createdBy?: string;
   dueDate: string;
   taskCode: string;
@@ -281,6 +284,90 @@ export type AllTaskPayloadType = {
   dueDate?: string | null;
   pageNumber?: number | null;
   pageSize?: number | null;
+  /** ask the server for only the caller's own tasks */
+  mine?: boolean;
+};
+
+export type MyTaskAnalyticsResponseType = {
+  message: string;
+  analytics: {
+    totalTasks: number;
+    overdueTasks: number;
+    inReviewTasks: number;
+    completedTasks: number;
+    byStatus: { key: TaskStatusEnumType; count: number }[];
+    byPriority: { key: TaskPriorityEnumType; count: number }[];
+  };
+};
+
+//********** */ NOTE + MEETING TYPES ****************
+//************************************************* */
+
+export type VisibilityType = "PRIVATE" | "SHARED";
+
+export type MiniUserType = {
+  _id: string;
+  name: string;
+  profilePicture: string | null;
+};
+
+export type NoteType = {
+  _id: string;
+  userId: MiniUserType;
+  workspaceId: string;
+  title: string;
+  /** sanitised HTML from the editor */
+  content: string;
+  visibility: VisibilityType;
+  sharedWith: MiniUserType[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AllNotesResponseType = {
+  message: string;
+  notes: NoteType[];
+  pagination: PaginationType;
+};
+
+export type NotePayloadType = {
+  title: string;
+  content: string;
+  visibility: VisibilityType;
+  sharedWith: string[];
+};
+
+export type MeetingType = {
+  _id: string;
+  userId: MiniUserType;
+  workspaceId: string;
+  title: string;
+  description: string | null;
+  startAt: string;
+  endAt: string;
+  meetingLink: string | null;
+  location: string | null;
+  visibility: VisibilityType;
+  sharedWith: MiniUserType[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AllMeetingsResponseType = {
+  message: string;
+  meetings: MeetingType[];
+  pagination: PaginationType;
+};
+
+export type MeetingPayloadType = {
+  title: string;
+  description: string;
+  startAt: string;
+  endAt: string;
+  meetingLink: string;
+  location: string;
+  visibility: VisibilityType;
+  sharedWith: string[];
 };
 
 //********** */ PRESENCE TYPES ***********************

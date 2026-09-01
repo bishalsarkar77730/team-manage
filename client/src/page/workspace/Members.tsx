@@ -5,18 +5,21 @@ import WorkspaceHeader from "@/components/workspace/common/workspace-header";
 
 export default function Members() {
   return (
-    <div className="w-full h-auto pt-2">
+    <div className="w-full py-4 md:pt-3">
       <WorkspaceHeader />
-      <Separator className="my-4 " />
+      <Separator className="my-5" />
       <main>
-        <div className="w-full max-w-3xl mx-auto pt-3">
+        <div className="mx-auto w-full max-w-3xl">
           <div>
-            <h2 className="text-lg leading-[30px] font-semibold mb-1">
+            <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+              People
+            </p>
+            <h2 className="text-lg font-semibold tracking-tight">
               Workspace members
             </h2>
-            <p className="text-sm text-muted-foreground">
-              Workspace members can view and join all Workspace project, tasks
-              and create new task in the Workspace.
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+              Members can see every project and task in this workspace, and
+              create tasks of their own.
             </p>
           </div>
           <Separator className="my-4" />

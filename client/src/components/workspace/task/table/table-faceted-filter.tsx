@@ -57,7 +57,7 @@ export function DataTableFacetedFilter({
           disabled={disabled}
           variant="outline"
           size="sm"
-          className="h-8 border-dashed w-full lg:w-auto"
+          className="h-8 shrink-0 border-dashed w-auto"
         >
           <PlusCircle />
           {title}
@@ -126,7 +126,7 @@ export function DataTableFacetedFilter({
                           "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
                           isSelected
                             ? "bg-primary text-primary-foreground"
-                            : "opacity-50 [&_svg]:invisible"
+                            : "opacity-50 [&_svg]:invisible",
                         )}
                       >
                         <Check />

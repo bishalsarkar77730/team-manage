@@ -45,7 +45,7 @@ const AllMembers = () => {
 
   const { data: presenceData } = useWorkspacePresence(workspaceId);
   const presenceByUser = new Map(
-    (presenceData?.presence || []).map((entry) => [entry.userId, entry])
+    (presenceData?.presence || []).map((entry) => [entry.userId, entry]),
   );
 
   const { mutate, isPending: isLoading } = useMutation({
@@ -99,9 +99,16 @@ const AllMembers = () => {
         return (
           <div
             key={member.userId._id}
-            className="flex items-center justify-between space-x-4"
+            // min-w-0 on the row itself is the load-bearing bit: this is a grid
+            // item, and a grid item defaults to min-width:auto, so without it
+            // the row keeps its min-content width (473px inside a 296px column)
+            // and pushes the role button clean off the screen.
+            className="flex min-w-0 items-center justify-between gap-3 sm:gap-4"
           >
-            <div className="flex items-center space-x-4">
+            {/* min-w-0 lets this side shrink. Without it the name/email block
+                keeps its intrinsic width and shoves the role button off the
+                screen entirely on a narrow viewport. */}
+            <div className="flex min-w-0 items-center gap-3 sm:gap-4">
               <div className="relative shrink-0">
                 <Avatar className="h-8 w-8">
                   <AvatarImage
@@ -116,18 +123,20 @@ const AllMembers = () => {
                   aria-hidden="true"
                   className={cn(
                     "absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background",
-                    isOnline ? "bg-emerald-500" : "bg-muted-foreground/40"
+                    isOnline ? "bg-emerald-500" : "bg-muted-foreground/40",
                   )}
                 />
               </div>
-              <div>
-                <p className="text-sm font-medium leading-none">{name}</p>
-                <p className="text-sm text-muted-foreground">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium leading-none">
+                  {name}
+                </p>
+                <p className="truncate text-xs sm:text-sm text-muted-foreground">
                   {member.userId.email}
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
               <div
                 title={presenceDetail(presence) || undefined}
                 className="hidden sm:flex flex-col items-end text-xs leading-tight"
@@ -137,7 +146,7 @@ const AllMembers = () => {
                     className={cn(
                       isOnline
                         ? "font-medium text-emerald-600 dark:text-emerald-400"
-                        : "text-muted-foreground"
+                        : "text-muted-foreground",
                     )}
                   >
                     {presenceLabel(presence)}
@@ -192,7 +201,7 @@ const AllMembers = () => {
                                       onSelect={() => {
                                         handleSelect(
                                           role._id,
-                                          member.userId._id
+                                          member.userId._id,
                                         );
                                       }}
                                     >
@@ -207,7 +216,7 @@ const AllMembers = () => {
                                           `Can view,edit only task created by.`}
                                       </p>
                                     </CommandItem>
-                                  )
+                                  ),
                               )}
                             </CommandGroup>
                           </>

@@ -10,12 +10,12 @@ const WorkspaceHeader = () => {
         <Loader className="w-8 h-8 animate-spin" />
       ) : (
         <div className="flex items-center gap-4">
-          <Avatar className="size-[60px] rounded-lg font-bold ">
-            <AvatarFallback className="rounded-lg bg-gradient-to-tl text-[35px]  to-black from-black text-white">
+          <Avatar className="size-14 shrink-0 rounded-lg font-bold sm:size-[60px]">
+            <AvatarFallback className="rounded-lg bg-primary text-[32px] font-semibold text-primary-foreground">
               {workspace?.name?.split(" ")?.[0]?.charAt(0) || "W"}
             </AvatarFallback>
           </Avatar>
-          <div className="grid flex-1 text-left leading-tight">
+          <div className="grid min-w-0 flex-1 text-left leading-tight">
             <span className="truncate font-semibold text-xl">
               {workspace?.name}
             </span>

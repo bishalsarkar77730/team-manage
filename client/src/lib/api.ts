@@ -24,6 +24,13 @@ import {
   registerType,
   WorkspaceByIdResponseType,
   WorkspacePresenceResponseType,
+  AllNotesResponseType,
+  NotePayloadType,
+  NoteType,
+  AllMeetingsResponseType,
+  MeetingPayloadType,
+  MeetingType,
+  MyTaskAnalyticsResponseType,
   EditWorkspaceType,
 } from "@/types/api.type";
 
@@ -246,6 +253,7 @@ export const getAllTasksQueryFn = async ({
   dueDate,
   pageNumber,
   pageSize,
+  mine,
 }: AllTaskPayloadType): Promise<AllTaskResponseType> => {
   const baseUrl = `/task/workspace/${workspaceId}/all`;
 
@@ -257,6 +265,7 @@ export const getAllTasksQueryFn = async ({
   if (status) queryParams.append("status", status);
   if (size) queryParams.append("size", size);
   if (dueDate) queryParams.append("dueDate", dueDate);
+  if (mine) queryParams.append("mine", "true");
   if (pageNumber) queryParams.append("pageNumber", pageNumber?.toString());
   if (pageSize) queryParams.append("pageSize", pageSize?.toString());
 
@@ -277,5 +286,151 @@ export const deleteTaskMutationFn = async ({
   const response = await API.delete(
     `task/${taskId}/workspace/${workspaceId}/delete`
   );
+  return response.data;
+};
+
+//********* NOTES ******************
+
+export const getNotesQueryFn = async ({
+  workspaceId,
+  keyword,
+  pageNumber,
+  pageSize,
+}: {
+  workspaceId: string;
+  keyword?: string | null;
+  pageNumber?: number;
+  pageSize?: number;
+}): Promise<AllNotesResponseType> => {
+  const params = new URLSearchParams();
+  if (keyword) params.append("keyword", keyword);
+  if (pageNumber) params.append("pageNumber", String(pageNumber));
+  if (pageSize) params.append("pageSize", String(pageSize));
+
+  const query = params.toString();
+  const response = await API.get(
+    `/note/workspace/${workspaceId}/all${query ? `?${query}` : ""}`
+  );
+  return response.data;
+};
+
+export const createNoteMutationFn = async ({
+  workspaceId,
+  data,
+}: {
+  workspaceId: string;
+  data: NotePayloadType;
+}): Promise<{ message: string; note: NoteType }> => {
+  const response = await API.post(`/note/workspace/${workspaceId}/create`, data);
+  return response.data;
+};
+
+export const updateNoteMutationFn = async ({
+  workspaceId,
+  noteId,
+  data,
+}: {
+  workspaceId: string;
+  noteId: string;
+  data: NotePayloadType;
+}): Promise<{ message: string; note: NoteType }> => {
+  const response = await API.put(
+    `/note/${noteId}/workspace/${workspaceId}/update`,
+    data
+  );
+  return response.data;
+};
+
+export const deleteNoteMutationFn = async ({
+  workspaceId,
+  noteId,
+}: {
+  workspaceId: string;
+  noteId: string;
+}): Promise<{ message: string }> => {
+  const response = await API.delete(
+    `/note/${noteId}/workspace/${workspaceId}/delete`
+  );
+  return response.data;
+};
+
+//********* MEETINGS ***************
+
+export const getMeetingsQueryFn = async ({
+  workspaceId,
+  from,
+  to,
+  keyword,
+  pageNumber,
+  pageSize,
+}: {
+  workspaceId: string;
+  from?: string;
+  to?: string;
+  keyword?: string | null;
+  pageNumber?: number;
+  pageSize?: number;
+}): Promise<AllMeetingsResponseType> => {
+  const params = new URLSearchParams();
+  if (from) params.append("from", from);
+  if (to) params.append("to", to);
+  if (keyword) params.append("keyword", keyword);
+  if (pageNumber) params.append("pageNumber", String(pageNumber));
+  if (pageSize) params.append("pageSize", String(pageSize));
+
+  const query = params.toString();
+  const response = await API.get(
+    `/meeting/workspace/${workspaceId}/all${query ? `?${query}` : ""}`
+  );
+  return response.data;
+};
+
+export const createMeetingMutationFn = async ({
+  workspaceId,
+  data,
+}: {
+  workspaceId: string;
+  data: MeetingPayloadType;
+}): Promise<{ message: string; meeting: MeetingType }> => {
+  const response = await API.post(
+    `/meeting/workspace/${workspaceId}/create`,
+    data
+  );
+  return response.data;
+};
+
+export const updateMeetingMutationFn = async ({
+  workspaceId,
+  meetingId,
+  data,
+}: {
+  workspaceId: string;
+  meetingId: string;
+  data: MeetingPayloadType;
+}): Promise<{ message: string; meeting: MeetingType }> => {
+  const response = await API.put(
+    `/meeting/${meetingId}/workspace/${workspaceId}/update`,
+    data
+  );
+  return response.data;
+};
+
+export const deleteMeetingMutationFn = async ({
+  workspaceId,
+  meetingId,
+}: {
+  workspaceId: string;
+  meetingId: string;
+}): Promise<{ message: string }> => {
+  const response = await API.delete(
+    `/meeting/${meetingId}/workspace/${workspaceId}/delete`
+  );
+  return response.data;
+};
+
+export const getMyTaskAnalyticsQueryFn = async (
+  workspaceId: string
+): Promise<MyTaskAnalyticsResponseType> => {
+  const response = await API.get(`/task/workspace/${workspaceId}/my-analytics`);
   return response.data;
 };

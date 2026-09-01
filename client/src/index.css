@@ -159,3 +159,16 @@ em-emoji-picker {
     @apply text-muted-foreground;
   }
 }
+
+@layer utilities {
+  /* For strips that scroll sideways on small screens — the filter facets and
+     the dashboard tab bar. The content is reachable by swipe or by the visible
+     overflow itself, so the bar would only add noise inside a toolbar. */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

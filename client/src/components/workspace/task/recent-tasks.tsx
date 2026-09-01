@@ -13,14 +13,16 @@ import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { Loader } from "lucide-react";
 
-const RecentTasks = () => {
+/** `mine` scopes the list to the caller's own tasks (My Dashboard). */
+const RecentTasks = ({ mine = false }: { mine?: boolean }) => {
   const workspaceId = useWorkspaceId();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["all-tasks", workspaceId],
+    queryKey: ["all-tasks", workspaceId, mine],
     queryFn: () =>
       getAllTasksQueryFn({
         workspaceId,
+        mine,
       }),
     staleTime: 0,
     enabled: !!workspaceId,
@@ -49,18 +51,16 @@ const RecentTasks = () => {
         </div>
       )}
 
-      <ul role="list" className="divide-y divide-gray-200">
+      <ul role="list" className="divide-y divide-border">
         {tasks.map((task) => {
-          const name = task?.assignedTo?.name || "";
-          const initials = getAvatarFallbackText(name);
-          const avatarColor = getAvatarColor(name);
+          const assignees = task.assignedTo ?? [];
           return (
             <li
               key={task._id}
-              className="p-4 flex items-center justify-between hover:bg-muted/50 transition-colors"
+              className="flex min-w-0 flex-wrap items-center justify-between gap-2 p-3 sm:flex-nowrap sm:p-4 hover:bg-muted/50 transition-colors"
             >
               {/* Task Info */}
-              <div className="flex flex-col space-y-1 flex-grow">
+              <div className="flex min-w-0 flex-grow basis-full flex-col space-y-1 sm:basis-auto">
                 <span className="text-sm capitalize text-muted-foreground font-medium">
                   {task.taskCode}
                 </span>
@@ -73,7 +73,7 @@ const RecentTasks = () => {
               </div>
 
               {/* Task Status */}
-              <div className="text-sm font-medium ">
+              <div className="shrink-0 text-sm font-medium">
                 <Badge
                   variant={TaskStatusEnum[task.status]}
                   className="flex w-auto p-1 px-2 gap-1 font-medium shadow-sm uppercase border-0"
@@ -83,7 +83,7 @@ const RecentTasks = () => {
               </div>
 
               {/* Task Priority */}
-              <div className="text-sm ml-2">
+              <div className="shrink-0 text-sm sm:ml-2">
                 <Badge
                   variant={TaskPriorityEnum[task.priority]}
                   className="flex w-auto p-1 px-2 gap-1 font-medium shadow-sm uppercase border-0"
@@ -93,16 +93,32 @@ const RecentTasks = () => {
               </div>
 
               {/* Assignee */}
-              <div className="flex items-center space-x-2 ml-2">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage
-                    src={task.assignedTo?.profilePicture || ""}
-                    alt={task.assignedTo?.name}
-                  />
-                  <AvatarFallback className={avatarColor}>
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
+              <div className="ml-auto flex shrink-0 items-center space-x-2 sm:ml-2">
+                {assignees.length ? (
+                  <div className="flex -space-x-2">
+                    {assignees.slice(0, 3).map((person) => (
+                      <Avatar
+                        key={person._id}
+                        title={person.name}
+                        className="h-8 w-8 ring-2 ring-background"
+                      >
+                        <AvatarImage
+                          src={person.profilePicture || ""}
+                          alt={person.name}
+                        />
+                        <AvatarFallback
+                          className={getAvatarColor(person.name)}
+                        >
+                          {getAvatarFallbackText(person.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="text-xs text-muted-foreground">
+                    Unassigned
+                  </span>
+                )}
               </div>
             </li>
           );

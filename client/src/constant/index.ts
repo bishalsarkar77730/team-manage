@@ -34,8 +34,13 @@ export const Permissions = {
   EDIT_PROJECT: "EDIT_PROJECT",
   DELETE_PROJECT: "DELETE_PROJECT",
   CREATE_TASK: "CREATE_TASK",
+  /** edit any task in the workspace */
   EDIT_TASK: "EDIT_TASK",
   DELETE_TASK: "DELETE_TASK",
+  /** see every task, not just your own */
+  VIEW_ALL_TASKS: "VIEW_ALL_TASKS",
+  /** edit a task you created or are assigned to */
+  EDIT_OWN_TASK: "EDIT_OWN_TASK",
   VIEW_ONLY: "VIEW_ONLY",
 } as const;
 

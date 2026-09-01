@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Logo from "@/components/logo";
+import Logo, { MeridianGraticule } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { BASE_ROUTE } from "@/routes/common/routePaths";
 import useAuth from "@/hooks/api/use-auth";
@@ -53,8 +53,9 @@ const InviteUser = () => {
   };
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
-      <div className="flex w-full max-w-md flex-col gap-6">
+    <div className="relative flex min-h-svh flex-col items-center justify-center gap-6 overflow-hidden bg-background p-6 md:p-10">
+      <MeridianGraticule className="pointer-events-none absolute -bottom-52 left-1/2 size-[46rem] -translate-x-1/2 text-foreground opacity-[0.06]" />
+      <div className="relative flex w-full max-w-md flex-col gap-6">
         <Link
           to="/"
           className="flex items-center gap-2 self-center font-medium tracking-tight"
@@ -65,12 +66,14 @@ const InviteUser = () => {
         <div className="flex flex-col gap-6">
           <Card>
             <CardHeader className="text-center">
-              <CardTitle className="text-xl">
-                Hey there! You're invited to join a Meridian Workspace!
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                Invitation
+              </p>
+              <CardTitle className="text-balance text-xl font-semibold tracking-tight">
+                You&apos;ve been invited to a workspace
               </CardTitle>
-              <CardDescription>
-                Looks like you need to be logged into your Meridian account to
-                join this Workspace.
+              <CardDescription className="text-pretty leading-relaxed">
+                Sign in or create an account to accept and join your team.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -79,12 +82,12 @@ const InviteUser = () => {
               ) : (
                 <div>
                   {user ? (
-                    <div className="flex items-center justify-center my-3">
-                      <form onSubmit={handleSubmit}>
+                    <div className="my-1 flex items-center justify-center">
+                      <form onSubmit={handleSubmit} className="w-full">
                         <Button
                           type="submit"
                           disabled={isLoading}
-                          className="!bg-green-500 !text-white text-[23px] !h-auto"
+                          className="h-11 w-full text-[15px] font-medium"
                         >
                           {isLoading && (
                             <Loader className="!w-6 !h-6 animate-spin" />
@@ -99,14 +102,19 @@ const InviteUser = () => {
                         className="flex-1 w-full text-base"
                         to={`/sign-up?returnUrl=${returnUrl}`}
                       >
-                        <Button className="w-full">Signup</Button>
+                        <Button className="h-11 w-full font-medium">
+                          Create account
+                        </Button>
                       </Link>
                       <Link
                         className="flex-1 w-full text-base"
                         to={`/?returnUrl=${returnUrl}`}
                       >
-                        <Button variant="secondary" className="w-full border">
-                          Login
+                        <Button
+                          variant="outline"
+                          className="h-11 w-full font-medium"
+                        >
+                          Sign in
                         </Button>
                       </Link>
                     </div>

@@ -18,7 +18,7 @@ const EditProjectDialog = (props: { project?: ProjectType }) => {
             <Edit3 className="w-5 h-5" />
           </button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-lg border-0">
+        <DialogContent className="!flex max-h-[85dvh] flex-col gap-0 overflow-hidden border-0 !p-0 sm:max-w-[520px]">
           <EditProjectForm
             key={props.project?._id}
             project={props.project}

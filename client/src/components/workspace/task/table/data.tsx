@@ -38,12 +38,12 @@ const sizeIcons = {
 
 export const statuses = transformOptions(
   Object.values(TaskStatusEnum),
-  statusIcons
+  statusIcons,
 );
 
 export const priorities = transformOptions(
   Object.values(TaskPriorityEnum),
-  priorityIcons
+  priorityIcons,
 );
 
 export const sizes = transformOptions(Object.values(TaskSizeEnum), sizeIcons);
