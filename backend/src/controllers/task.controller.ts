@@ -85,6 +85,7 @@ export const getAllTasksController = asyncHandler(
       priority: req.query.priority
         ? (req.query.priority as string)?.split(",")
         : undefined,
+      size: req.query.size ? (req.query.size as string)?.split(",") : undefined,
       assignedTo: req.query.assignedTo
         ? (req.query.assignedTo as string)?.split(",")
         : undefined,

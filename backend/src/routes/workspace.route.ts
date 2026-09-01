@@ -9,6 +9,7 @@ import {
   getWorkspaceMembersController,
   updateWorkspaceByIdController,
 } from "../controllers/workspace.controller";
+import { getWorkspacePresenceController } from "../controllers/presence.controller";
 
 const workspaceRoutes = Router();
 
@@ -26,6 +27,8 @@ workspaceRoutes.get("/all", getAllWorkspacesUserIsMemberController);
 
 workspaceRoutes.get("/members/:id", getWorkspaceMembersController);
 workspaceRoutes.get("/analytics/:id", getWorkspaceAnalyticsController);
+// must stay above the "/:id" catch-all below
+workspaceRoutes.get("/presence/:id", getWorkspacePresenceController);
 
 workspaceRoutes.get("/:id", getWorkspaceByIdController);
 

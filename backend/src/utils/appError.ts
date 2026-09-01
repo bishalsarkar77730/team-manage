@@ -11,6 +11,8 @@ export class AppError extends Error {
     errorCode?: ErrorCodeEnumType
   ) {
     super(message);
+    // without this, every subclass reports `name === "Error"` when logged
+    this.name = new.target.name;
     this.statusCode = statusCode;
     this.errorCode = errorCode;
     Error.captureStackTrace(this, this.constructor);

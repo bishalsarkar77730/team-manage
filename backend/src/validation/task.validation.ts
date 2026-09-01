@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { TaskPriorityEnum, TaskStatusEnum } from "../enums/task.enum";
+import {
+  TaskPriorityEnum,
+  TaskSizeEnum,
+  TaskStatusEnum,
+} from "../enums/task.enum";
 
 export const titleSchema = z.string().trim().min(1).max(255);
 export const descriptionSchema = z.string().trim().optional();
@@ -13,6 +17,12 @@ export const prioritySchema = z.enum(
 export const statusSchema = z.enum(
   Object.values(TaskStatusEnum) as [string, ...string[]]
 );
+
+// Optional so tasks created before `size` existed — and any client that does
+// not send it — fall back to the schema default rather than failing validation.
+export const sizeSchema = z
+  .enum(Object.values(TaskSizeEnum) as [string, ...string[]])
+  .optional();
 
 export const dueDateSchema = z
   .string()
@@ -34,6 +44,7 @@ export const createTaskSchema = z.object({
   description: descriptionSchema,
   priority: prioritySchema,
   status: statusSchema,
+  size: sizeSchema,
   assignedTo: assignedToSchema,
   dueDate: dueDateSchema,
 });
@@ -43,6 +54,7 @@ export const updateTaskSchema = z.object({
   description: descriptionSchema,
   priority: prioritySchema,
   status: statusSchema,
+  size: sizeSchema,
   assignedTo: assignedToSchema,
   dueDate: dueDateSchema,
 });

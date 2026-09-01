@@ -2,6 +2,8 @@ import mongoose, { Document, Schema } from "mongoose";
 import {
   TaskPriorityEnum,
   TaskPriorityEnumType,
+  TaskSizeEnum,
+  TaskSizeEnumType,
   TaskStatusEnum,
   TaskStatusEnumType,
 } from "../enums/task.enum";
@@ -15,6 +17,7 @@ export interface TaskDocument extends Document {
   workspace: mongoose.Types.ObjectId;
   status: TaskStatusEnumType;
   priority: TaskPriorityEnumType;
+  size: TaskSizeEnumType;
   assignedTo: mongoose.Types.ObjectId | null;
   createdBy: mongoose.Types.ObjectId;
   dueDate: Date | null;
@@ -58,6 +61,11 @@ const taskSchema = new Schema<TaskDocument>(
       type: String,
       enum: Object.values(TaskPriorityEnum),
       default: TaskPriorityEnum.MEDIUM,
+    },
+    size: {
+      type: String,
+      enum: Object.values(TaskSizeEnum),
+      default: TaskSizeEnum.MEDIUM,
     },
     assignedTo: {
       type: Schema.Types.ObjectId,

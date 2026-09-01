@@ -1,26 +1,28 @@
 import { NextFunction, Request, Response } from "express";
 import { asyncHandler } from "../middlewares/asyncHandler.middleware";
-import { config } from "../config/app.config";
+// only used by the disabled Google OAuth callback below
+// import { config } from "../config/app.config";
 import { registerSchema } from "../validation/auth.validation";
 import { HTTPSTATUS } from "../config/http.config";
 import { registerUserService } from "../services/auth.service";
 import passport from "passport";
 
-export const googleLoginCallback = asyncHandler(
-  async (req: Request, res: Response) => {
-    const currentWorkspace = req.user?.currentWorkspace;
-
-    if (!currentWorkspace) {
-      return res.redirect(
-        `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=failure`
-      );
-    }
-
-    return res.redirect(
-      `${config.FRONTEND_ORIGIN}/workspace/${currentWorkspace}`
-    );
-  }
-);
+// --- Google OAuth (disabled) ---
+// export const googleLoginCallback = asyncHandler(
+//   async (req: Request, res: Response) => {
+//     const currentWorkspace = req.user?.currentWorkspace;
+//
+//     if (!currentWorkspace) {
+//       return res.redirect(
+//         `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=failure`
+//       );
+//     }
+//
+//     return res.redirect(
+//       `${config.FRONTEND_ORIGIN}/workspace/${currentWorkspace}`
+//     );
+//   }
+// );
 
 export const registerUserController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -74,7 +76,6 @@ export const logOutController = asyncHandler(
   async (req: Request, res: Response) => {
     req.logout((err) => {
       if (err) {
-        console.error("Logout error:", err);
         return res
           .status(HTTPSTATUS.INTERNAL_SERVER_ERROR)
           .json({ error: "Failed to log out" });

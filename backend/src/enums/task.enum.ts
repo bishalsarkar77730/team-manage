@@ -12,5 +12,12 @@ export const TaskPriorityEnum = {
   HIGH: "HIGH",
 } as const;
 
+export const TaskSizeEnum = {
+  SMALL: "SMALL",
+  MEDIUM: "MEDIUM",
+  LARGE: "LARGE",
+} as const;
+
 export type TaskStatusEnumType = keyof typeof TaskStatusEnum;
 export type TaskPriorityEnumType = keyof typeof TaskPriorityEnum;
+export type TaskSizeEnumType = keyof typeof TaskSizeEnum;

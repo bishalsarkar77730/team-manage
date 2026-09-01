@@ -18,12 +18,10 @@ const formatZodError = (res: Response, error: z.ZodError) => {
 
 export const errorHandler: ErrorRequestHandler = (
   error,
-  req,
+  _req,
   res,
   next
 ): any => {
-  console.error(`Error Occured on PATH: ${req.path} `, error);
-
   if (error instanceof SyntaxError) {
     return res.status(HTTPSTATUS.BAD_REQUEST).json({
       message: "Invalid JSON format. Please check your request body.",

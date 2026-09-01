@@ -1,4 +1,8 @@
-import { TaskPriorityEnum, TaskStatusEnum } from "../enums/task.enum";
+import {
+  TaskPriorityEnum,
+  TaskSizeEnum,
+  TaskStatusEnum,
+} from "../enums/task.enum";
 import MemberModel from "../models/member.model";
 import ProjectModel from "../models/project.model";
 import TaskModel from "../models/task.model";
@@ -13,11 +17,13 @@ export const createTaskService = async (
     description?: string;
     priority: string;
     status: string;
+    size?: string;
     assignedTo?: string | null;
     dueDate?: string;
   }
 ) => {
-  const { title, description, priority, status, assignedTo, dueDate } = body;
+  const { title, description, priority, status, size, assignedTo, dueDate } =
+    body;
 
   const project = await ProjectModel.findById(projectId);
 
@@ -41,6 +47,7 @@ export const createTaskService = async (
     description,
     priority: priority || TaskPriorityEnum.MEDIUM,
     status: status || TaskStatusEnum.TODO,
+    size: size || TaskSizeEnum.MEDIUM,
     assignedTo,
     createdBy: userId,
     workspace: workspaceId,
@@ -62,6 +69,7 @@ export const updateTaskService = async (
     description?: string;
     priority: string;
     status: string;
+    size?: string;
     assignedTo?: string | null;
     dueDate?: string;
   }
@@ -103,6 +111,7 @@ export const getAllTasksService = async (
     projectId?: string;
     status?: string[];
     priority?: string[];
+    size?: string[];
     assignedTo?: string[];
     keyword?: string;
     dueDate?: string;
@@ -126,6 +135,10 @@ export const getAllTasksService = async (
 
   if (filters.priority && filters.priority?.length > 0) {
     query.priority = { $in: filters.priority };
+  }
+
+  if (filters.size && filters.size?.length > 0) {
+    query.size = { $in: filters.size };
   }
 
   if (filters.assignedTo && filters.assignedTo?.length > 0) {
