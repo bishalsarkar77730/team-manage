@@ -34,7 +34,10 @@ const accountSchema = new Schema<AccountDocument>(
     timestamps: true,
     toJSON: {
       transform(doc, ret) {
-        delete ret.refreshToken;
+        // mongoose types `ret` with the required schema fields, so widen it to
+        // make the (intentional) removal of the secret a legal delete
+        delete (ret as Partial<AccountDocument>).refreshToken;
+        return ret;
       },
     },
   }
