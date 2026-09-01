@@ -19,7 +19,11 @@ const EditProjectDialog = (props: { project?: ProjectType }) => {
           </button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-lg border-0">
-          <EditProjectForm project={props.project} onClose={onClose} />
+          <EditProjectForm
+            key={props.project?._id}
+            project={props.project}
+            onClose={onClose}
+          />
         </DialogContent>
       </Dialog>
     </div>

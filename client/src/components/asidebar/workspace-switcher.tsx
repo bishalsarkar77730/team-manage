@@ -35,8 +35,6 @@ export function WorkspaceSwitcher() {
   const { onOpen } = useCreateWorkspaceDialog();
   const workspaceId = useWorkspaceId();
 
-  const [activeWorkspace, setActiveWorkspace] = React.useState<WorkspaceType>();
-
   const { data, isPending } = useQuery({
     queryKey: ["userWorkspaces"],
     queryFn: getAllWorkspacesUserIsMemberQueryFn,
@@ -46,21 +44,24 @@ export function WorkspaceSwitcher() {
 
   const workspaces = data?.workspaces;
 
-  React.useEffect(() => {
-    if (workspaces?.length) {
-      const workspace = workspaceId
-        ? workspaces.find((ws) => ws._id === workspaceId)
-        : workspaces[0];
+  // the active workspace is whatever the URL points at (falling back to the
+  // first one), so it is derived rather than mirrored into state
+  const activeWorkspace = React.useMemo<WorkspaceType | undefined>(() => {
+    if (!workspaces?.length) return undefined;
 
-      if (workspace) {
-        setActiveWorkspace(workspace);
-        if (!workspaceId) navigate(`/workspace/${workspace._id}`);
-      }
+    return workspaceId
+      ? workspaces.find((ws) => ws._id === workspaceId)
+      : workspaces[0];
+  }, [workspaceId, workspaces]);
+
+  // landing without a workspace in the URL redirects to the first one
+  React.useEffect(() => {
+    if (!workspaceId && activeWorkspace) {
+      navigate(`/workspace/${activeWorkspace._id}`);
     }
-  }, [workspaceId, workspaces, navigate]);
+  }, [workspaceId, activeWorkspace, navigate]);
 
   const onSelect = (workspace: WorkspaceType) => {
-    setActiveWorkspace(workspace);
     navigate(`/workspace/${workspace._id}`);
   };
 

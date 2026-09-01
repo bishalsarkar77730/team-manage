@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -34,7 +34,9 @@ export default function EditProjectForm(props: {
   const workspaceId = useWorkspaceId();
   const queryClient = useQueryClient();
 
-  const [emoji, setEmoji] = useState("📊");
+  // seeded from the project on mount; the dialog remounts this form per project
+  // (see the `key` in edit-project-dialog), so no effect is needed to re-sync
+  const [emoji, setEmoji] = useState(project?.emoji || "📊");
 
   const projectId = project?._id as string;
 
@@ -52,18 +54,10 @@ export default function EditProjectForm(props: {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
+      name: project?.name || "",
+      description: project?.description || "",
     },
   });
-
-  useEffect(() => {
-    if (project) {
-      setEmoji(project.emoji);
-      form.setValue("name", project.name);
-      form.setValue("description", project.description);
-    }
-  }, [form, project]);
 
   const handleEmojiSelection = (emoji: string) => {
     setEmoji(emoji);
