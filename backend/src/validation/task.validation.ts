@@ -8,7 +8,14 @@ import {
 export const titleSchema = z.string().trim().min(1).max(255);
 export const descriptionSchema = z.string().trim().optional();
 
-export const assignedToSchema = z.string().trim().min(1).nullable().optional();
+/**
+ * A task can be assigned to several members. Accepts a single id too, so an
+ * older client (or a saved request) does not break.
+ */
+export const assignedToSchema = z
+  .union([z.string().trim().min(1), z.array(z.string().trim().min(1)).max(50)])
+  .nullable()
+  .optional();
 
 export const prioritySchema = z.enum(
   Object.values(TaskPriorityEnum) as [string, ...string[]]

@@ -3,6 +3,7 @@ import {
   createTaskController,
   deleteTaskController,
   getAllTasksController,
+  getMyTaskAnalyticsController,
   getTaskByIdController,
   updateTaskController,
 } from "../controllers/task.controller";
@@ -22,6 +23,11 @@ taskRoutes.put(
 );
 
 taskRoutes.get("/workspace/:workspaceId/all", getAllTasksController);
+
+taskRoutes.get(
+  "/workspace/:workspaceId/my-analytics",
+  getMyTaskAnalyticsController
+);
 
 taskRoutes.get(
   "/:id/project/:projectId/workspace/:workspaceId",

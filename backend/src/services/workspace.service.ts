@@ -132,9 +132,15 @@ export const getWorkspaceAnalyticsService = async (workspaceId: string) => {
     status: TaskStatusEnum.DONE,
   });
 
+  const inReviewTasks = await TaskModel.countDocuments({
+    workspace: workspaceId,
+    status: TaskStatusEnum.IN_REVIEW,
+  });
+
   const analytics = {
     totalTasks,
     overdueTasks,
+    inReviewTasks,
     completedTasks,
   };
 

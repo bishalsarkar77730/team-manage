@@ -10,10 +10,13 @@ import { workspaceIdSchema } from "../validation/workspace.validation";
 import { Permissions } from "../enums/role.enum";
 import { getMemberRoleInWorkspace } from "../services/member.service";
 import { roleGuard } from "../utils/roleGuard";
+import { RolePermissions } from "../utils/role-permission";
+import { RoleType } from "../enums/role.enum";
 import {
   createTaskService,
   deleteTaskService,
   getAllTasksService,
+  getMyTaskAnalyticsService,
   getTaskByIdService,
   updateTaskService,
 } from "../services/task.service";
@@ -55,13 +58,22 @@ export const updateTaskController = asyncHandler(
     const workspaceId = workspaceIdSchema.parse(req.params.workspaceId);
 
     const { role } = await getMemberRoleInWorkspace(userId, workspaceId);
-    roleGuard(role, [Permissions.EDIT_TASK]);
+
+    // EDIT_TASK lets you edit anything; EDIT_OWN_TASK only your own. Members
+    // have the second, so the service is told to enforce ownership.
+    const permissions = RolePermissions[role as RoleType];
+    const canEditAny = permissions.includes(Permissions.EDIT_TASK);
+
+    if (!canEditAny) {
+      roleGuard(role, [Permissions.EDIT_OWN_TASK]);
+    }
 
     const { updatedTask } = await updateTaskService(
       workspaceId,
       projectId,
       taskId,
-      body
+      body,
+      canEditAny ? undefined : { userId: String(userId) }
     );
 
     return res.status(HTTPSTATUS.OK).json({
@@ -91,6 +103,7 @@ export const getAllTasksController = asyncHandler(
         : undefined,
       keyword: req.query.keyword as string | undefined,
       dueDate: req.query.dueDate as string | undefined,
+      onlyForUserId: undefined as string | undefined,
     };
 
     const pagination = {
@@ -100,6 +113,16 @@ export const getAllTasksController = asyncHandler(
 
     const { role } = await getMemberRoleInWorkspace(userId, workspaceId);
     roleGuard(role, [Permissions.VIEW_ONLY]);
+
+    // Without VIEW_ALL_TASKS you only ever see your own, whichever page asks.
+    // `mine=true` lets someone who *can* see everything scope it down.
+    const permissions = RolePermissions[role as RoleType];
+    const canViewAll = permissions.includes(Permissions.VIEW_ALL_TASKS);
+    const wantsMine = req.query.mine === "true";
+
+    if (!canViewAll || wantsMine) {
+      filters.onlyForUserId = String(userId);
+    }
 
     const result = await getAllTasksService(workspaceId, filters, pagination);
 
@@ -144,6 +167,24 @@ export const deleteTaskController = asyncHandler(
 
     return res.status(HTTPSTATUS.OK).json({
       message: "Task deleted successfully",
+    });
+  }
+);
+
+export const getMyTaskAnalyticsController = asyncHandler(
+  async (req: Request, res: Response) => {
+    const userId = req.user?._id;
+    const workspaceId = workspaceIdSchema.parse(req.params.workspaceId);
+
+    const { role } = await getMemberRoleInWorkspace(userId, workspaceId);
+    roleGuard(role, [Permissions.VIEW_ONLY]);
+
+    // always scoped to the caller, whatever their role
+    const result = await getMyTaskAnalyticsService(workspaceId, String(userId));
+
+    return res.status(HTTPSTATUS.OK).json({
+      message: "My task analytics fetched successfully",
+      ...result,
     });
   }
 );

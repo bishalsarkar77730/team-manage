@@ -8,7 +8,8 @@
     "dev": "tsx watch src/index.ts",
     "typecheck": "tsc --noEmit",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "migrate:assignees": "tsx src/seeders/task-assignees.seeder.ts"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +24,7 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
+    "sanitize-html": "^2.17.7",
     "zod": "^3.25.76"
   },
   "devDependencies": {
@@ -34,6 +36,7 @@
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.17",
     "@types/passport-local": "^1.0.38",
+    "@types/sanitize-html": "^2.16.1",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   }

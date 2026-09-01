@@ -21,6 +21,8 @@ import workspaceRoutes from "./routes/workspace.route";
 import memberRoutes from "./routes/member.route";
 import projectRoutes from "./routes/project.route";
 import taskRoutes from "./routes/task.route";
+import noteRoutes from "./routes/note.route";
+import meetingRoutes from "./routes/meeting.route";
 
 const app = express();
 const BASE_PATH = config.BASE_PATH;
@@ -99,6 +101,13 @@ app.use(
 app.use(`${BASE_PATH}/member`, isAuthenticated, touchPresence, memberRoutes);
 app.use(`${BASE_PATH}/project`, isAuthenticated, touchPresence, projectRoutes);
 app.use(`${BASE_PATH}/task`, isAuthenticated, touchPresence, taskRoutes);
+app.use(`${BASE_PATH}/note`, isAuthenticated, touchPresence, noteRoutes);
+app.use(
+  `${BASE_PATH}/meeting`,
+  isAuthenticated,
+  touchPresence,
+  meetingRoutes
+);
 
 app.use(errorHandler);
 

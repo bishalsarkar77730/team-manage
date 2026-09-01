@@ -18,7 +18,8 @@ export interface TaskDocument extends Document {
   status: TaskStatusEnumType;
   priority: TaskPriorityEnumType;
   size: TaskSizeEnumType;
-  assignedTo: mongoose.Types.ObjectId | null;
+  /** many members can own a task; all of them can see and edit it */
+  assignedTo: mongoose.Types.ObjectId[];
   createdBy: mongoose.Types.ObjectId;
   dueDate: Date | null;
   createdAt: Date;
@@ -67,11 +68,12 @@ const taskSchema = new Schema<TaskDocument>(
       enum: Object.values(TaskSizeEnum),
       default: TaskSizeEnum.MEDIUM,
     },
-    assignedTo: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      default: null,
-    },
+    assignedTo: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: "User",
